@@ -16,5 +16,5 @@ maxUploadSize = 50
 gatherUsageStats = false
 
 [client]
-toolbarMode = "developer"
+toolbarMode = "minimal"
 showErrorDetails = false

@@ -372,20 +372,10 @@ def get_theme_css(theme: str) -> str:
         font-weight: bold;
     }
     
-    /* White-Labeling & Toolbar Visibility */
+    /* White-Labeling */
     #MainMenu {visibility: hidden !important; display: none !important;}
     footer {visibility: hidden !important; display: none !important;}
-    [data-testid="stToolbar"] {
-        visibility: visible !important;
-        display: flex !important;
-    }
-    [data-testid="stToolbar"] button,
-    [data-testid="stToolbar"] button *,
-    [data-testid="stToolbar"] svg {
-        color: #ffffff !important;
-        fill: #ffffff !important;
-        -webkit-text-fill-color: #0f172a !important;
-    }
+    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
     [data-testid="stDecoration"] {display: none !important;}
     header[data-testid="stHeader"] {background: transparent !important;}
     [class*="viewerBadge"],
@@ -513,20 +503,10 @@ def get_theme_css(theme: str) -> str:
         font-weight: bold;
     }
     
-    /* White-Labeling & Toolbar Visibility */
+    /* White-Labeling */
     #MainMenu {visibility: hidden !important; display: none !important;}
     footer {visibility: hidden !important; display: none !important;}
-    [data-testid="stToolbar"] {
-        visibility: visible !important;
-        display: flex !important;
-    }
-    [data-testid="stToolbar"] button,
-    [data-testid="stToolbar"] button *,
-    [data-testid="stToolbar"] svg {
-        color: #0f172a !important;
-        fill: #0f172a !important;
-        -webkit-text-fill-color: #0f172a !important;
-    }
+    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
     [data-testid="stDecoration"] {display: none !important;}
     header[data-testid="stHeader"] {background: transparent !important;}
     [class*="viewerBadge"],
@@ -558,9 +538,6 @@ with st.sidebar:
     new_theme = "dark" if dark_mode else "light"
     if new_theme != st.session_state.theme:
         st.session_state.theme = new_theme
-        st.rerun()
-    
-    if st.button("🔄 Rerun App", key="sidebar_rerun_btn", use_container_width=True):
         st.rerun()
     
     st.markdown("---")
