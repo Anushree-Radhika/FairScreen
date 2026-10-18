@@ -2,11 +2,18 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install C/C++ build compilers required to compile packages like NumPy/SciPy from source
+# Suppress interactive warnings
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install C/C++ and Fortran build tools required by NumPy/SciPy on s390x
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
     g++ \
+    gfortran \
+    libopenblas-dev \
+    liblapack-dev \
+    pkg-config \
     && rm -rf /var/lib/apt-get/lists/*
 
 COPY requirements.txt .
