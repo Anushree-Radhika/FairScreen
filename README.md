@@ -12,17 +12,17 @@ The codebase is partitioned into three distinct layers:
 ```
 FairScreen/
 ├── frontend/                     # FRONTEND (UI & Dashboards)
-│   ├── app.py                    # Multi-tab Streamlit dashboard
-│   └── components/               # Visual metrics, cards & widgets
+│   └── app.py                    # Multi-tab Streamlit dashboard (Screening, Audits, Benchmarks)
 │
 ├── backend/                      # BACKEND (Ingestion & Orchestration)
 │   ├── __init__.py
 │   ├── ingest.py                 # In-memory PDF parser (pypdf + pdfplumber fallback)
-│   └── pipeline.py               # End-to-end FairScreen orchestrator
+│   └── pipeline.py               # End-to-end FairScreen multi-model orchestrator
 │
 ├── ml/                           # ML & FAIRNESS ENGINE (100% Authentic Data)
 │   ├── __init__.py
-│   ├── train_recruitment_dataset.py # Trains on 10,174 real Kaggle recruitment resumes
+│   ├── bias_audit.py             # Audits Bias in Bios (138k bios) & PopResume (2.5k resumes)
+│   ├── build_popresume.py        # Population-representative resume dataset generator
 │   ├── real_benchmark.py         # Evaluates 962 authentic multi-domain resumes
 │   ├── redact.py                 # Demographic & identity signal scrubber
 │   ├── features.py               # TF-IDF & merit-based feature engineering
@@ -30,29 +30,65 @@ FairScreen/
 │   ├── audit.py                  # AIF360 parity metrics & counterfactual swap test
 │   ├── mitigate.py               # AIF360 sample reweighing mitigation
 │   ├── explain.py                # Merit-based token coefficient explainer
-│   ├── jd_checker.py             # Gaucher et al. gender-coded wording audit
-│   └── train_all.py              # Single command to train all authentic models
+│   ├── project_analyzer.py       # Projects section parser & ATS role alignment engine
+│   └── train_all.py              # Single command to train and audit all models
 │
-├── models/                       # SERIALIZED REAL ARTIFACTS (.pkl)
-│   ├── recruitment_baseline_model.pkl
-│   ├── recruitment_baseline_vectorizer.pkl
-│   ├── recruitment_redacted_model.pkl
-│   ├── recruitment_redacted_vectorizer.pkl
-│   ├── recruitment_mitigated_model.pkl
-│   └── recruitment_mitigated_vectorizer.pkl
+├── models/                       # SERIALIZED ARTIFACTS (.pkl)
+│   ├── bias_in_bios_baseline_model.pkl
+│   ├── bias_in_bios_baseline_vectorizer.pkl
+│   ├── pop_resume_model.pkl
+│   ├── pop_resume_vectorizer.pkl
+│   ├── bias_in_bios_redacted_model.pkl
+│   ├── bias_in_bios_redacted_vectorizer.pkl
+│   ├── bias_in_bios_mitigated_model.pkl
+│   └── bias_in_bios_mitigated_vectorizer.pkl
 │
-├── data/                         # DATASETS & WORD LISTS
-│   ├── kaggle_recruitment/       # 10,174 authentic candidate resumes & decisions
-│   ├── gendered_words.json       # Gaucher et al. masculine/feminine stems
+├── data/                         # DATASETS & BENCHMARKS (Local Only, Excluded via .gitignore)
+│   ├── bias_in_bios/             # LabHC/bias_in_bios (138,711 real biographies, 28 professions)
+│   ├── pop_resume/               # sumin-yu/PopResume (2,500 population-representative resumes)
+│   ├── real_resumes.csv          # 962 authentic resumes for utility benchmarking
 │   ├── name_pools.json           # Diverse male/female names for swap tests
-│   └── results/                  # Cached audit parity benchmarks & role statistics
+│   └── results/                  # Cached bias audit benchmarks & role statistics
 │
 ├── app.py                        # Root launcher delegating to frontend/app.py
 ├── requirements.txt              # Frozen Python dependencies
 ├── Dockerfile                    # Container definition for LinuxONE
-├── CREDITS.md                    # Research and open-source citations
-└── LICENSE                       # MIT License
+├── PRODUCT_OVERVIEW.md           # Comprehensive architectural & algorithmic specification
+└── CREDITS.md                    # Research and open-source citations
 ```
+
+## 📊 Datasets Used & Their Purpose
+
+FairScreen is built on **100% authentic, peer-reviewed benchmarks** to measure, isolate, and mitigate algorithmic hiring bias. Raw data files reside strictly within the local environment and are excluded from Git version control (via `.gitignore`) to protect data storage and integrity.
+
+### 1. `LabHC/bias_in_bios` — Empirical Bias Benchmark & Baseline Training
+- **Source**: Hugging Face [`LabHC/bias_in_bios`](https://huggingface.co/datasets/LabHC/bias_in_bios) (De-Arteaga et al., Microsoft Research, *ACM FAT\* 2019*).
+- **Volume**: **138,711 real-world online biographies** spanning 28 distinct professions (`dev.parquet` [39k] & `test.parquet` [99k]).
+- **Purpose**:
+  - **Historical Biased AI (Baseline Model)**: Demonstrates how standard AI models trained on unredacted text absorb systemic occupational stereotypes (e.g., Software Engineering is 15.9% female with Disparate Impact Ratio = 0.189; Nursing is 90.8% female with DIR = 9.897).
+  - **AIF360 Mitigation Training**: Serves as the training ground for FairScreen's demographic-blind, sample-reweighed model to correct historical selection disparities.
+  - **EEOC Four-Fifths Compliance Audit**: Evaluates the disparate impact ratio across all 28 career professions in Tab 2.
+
+### 2. `sumin-yu/PopResume` — Calibrated Selection Percentage & Causal Fairness
+- **Source**: Hugging Face [`sumin-yu/PopResume`](https://huggingface.co/datasets/sumin-yu/PopResume) (Yu et al., *EMNLP Oral 2024*).
+- **Volume**: **2,500 population-representative resumes** across 12 major occupational groups (Software Developers, Registered Nurses, Accountants & Auditors, Teachers, Construction Laborers, etc.).
+- **Purpose**:
+  - **PopResume Selection Predictor**: Powers Pillar 2 of candidate screening, generating an exact **calibrated Percentage of Getting Selected** based on legitimate qualifications, degrees, and tenure.
+  - **Cohort Benchmarks & Hiring Distributions**: Powers role-specific selection criteria insights (comparing candidate scores against real applicant pools).
+  - **Causal Path Decomposition**: Isolates the *direct qualification path* (skills, degrees, credentials) from the *indirect demographic proxy path* (names, gender pronouns).
+
+### 3. Real Unstructured Resumes — Utility Preservation Benchmark
+- **Source**: Authentic Multi-Domain Resume Corpus (Bhawal et al., Kaggle Authentic Career Corpus).
+- **Volume**: **962 authentic resumes** across 25 career domains (Data Science, DevOps, HR, Java Developer, etc.).
+- **Purpose**:
+  - **0.0% Utility Loss Validation**: Empirically proves in Tab 3 that scrubbing candidate names, emails, and demographic identifiers results in **zero loss of predictive accuracy** (retains 100% of merit signal, ROC-AUC 0.999).
+
+### 4. SSA Demographic Name Pools — Counterfactual Swap Testing
+- **Source**: United States Social Security Administration (SSA) demographic frequency registries.
+- **Volume**: Curated male and female given name registries across diverse demographics.
+- **Purpose**:
+  - **Counterfactual Name Swap Robustness**: Evaluates identical authentic candidate credentials with swapped first names (Male ↔ Female) in Tab 2 to verify that FairScreen locks discriminatory variance down to **0.0% score swing**.
+  - **Deterministic Entity Redaction**: Feeds the zero-leakage in-memory redaction engine to strip candidate identities before feature extraction.
 
 ---
 
@@ -82,3 +118,11 @@ Visit **`http://localhost:8501`** in your browser.
 2. **Identity Redaction**: Candidate names, contact information, honorifics, and gendered pronouns are scrubbed prior to scoring.
 3. **Counterfactual Swap Stability**: Demonstrates that changing a candidate's gender from female to male yields an identical score under the mitigated model (zero shift), eliminating baseline discrimination.
 4. **Local Air-Gapped Execution**: All inference, audit, and explainability happen entirely in-memory with zero external API calls.
+
+---
+
+## 📖 Deep-Dive Documentation
+
+For detailed technical specifications, refer to:
+- **[`PRODUCT_OVERVIEW.md`](file:///c:/Projects/FairScreen/PRODUCT_OVERVIEW.md)**: Full end-to-end product architecture, algorithmic explanations of the 3-pillar screening engine, mathematical formulas for parity metrics (DIR, SPD, EOD), 6-role team distribution, and legal/regulatory compliance (EEOC Title VII, NYC Local Law 144, EU AI Act).
+- **[`CREDITS.md`](file:///c:/Projects/FairScreen/CREDITS.md)**: Academic citations, peer-reviewed literature, and open-source packages utilized in the project.

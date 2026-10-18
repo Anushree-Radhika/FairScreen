@@ -1,4 +1,15 @@
+# Python cache
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*.pyc
+
+# Local Team Roadmap PDF
 FairScreen Team Build Roadmap (6 Roles).pdf
-*/__pycache__
-__pycache__
-data
+
+# Large Raw Datasets (Do not commit to Git)
+data/bias_in_bios/
+data/real_resumes.csv
+data/*.parquet
+data/*.tar*
+data/*.zip

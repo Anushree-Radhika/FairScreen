@@ -1,0 +1,713 @@
+{
+  "title": "Empirical Algorithmic Fairness Audit: Bias in Bios & PopResume",
+  "bias_in_bios": {
+    "dataset_name": "Bias in Bios (LabHC/bias_in_bios)",
+    "source": "De-Arteaga et al. (2019) / Microsoft Research FAT* 2019",
+    "total_biographies": 39642,
+    "evaluated_sample": 12000,
+    "profession_disparities": [
+      {
+        "profession_id": 23,
+        "profession": "Rapper",
+        "total_bios": 141,
+        "female_representation": 0.0993,
+        "male_representation": 0.9007,
+        "disparate_impact_ratio": 0.1102,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 8,
+        "profession": "DJ",
+        "total_bios": 150,
+        "female_representation": 0.1467,
+        "male_representation": 0.8533,
+        "disparate_impact_ratio": 0.1719,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 25,
+        "profession": "Surgeon",
+        "total_bios": 1360,
+        "female_representation": 0.1485,
+        "male_representation": 0.8515,
+        "disparate_impact_ratio": 0.1744,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 24,
+        "profession": "Software Engineer",
+        "total_bios": 692,
+        "female_representation": 0.159,
+        "male_representation": 0.841,
+        "disparate_impact_ratio": 0.189,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 5,
+        "profession": "Composer",
+        "total_bios": 561,
+        "female_representation": 0.164,
+        "male_representation": 0.836,
+        "disparate_impact_ratio": 0.1962,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 4,
+        "profession": "Comedian",
+        "total_bios": 282,
+        "female_representation": 0.2128,
+        "male_representation": 0.7872,
+        "disparate_impact_ratio": 0.2703,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 1,
+        "profession": "Architect",
+        "total_bios": 1012,
+        "female_representation": 0.2372,
+        "male_representation": 0.7628,
+        "disparate_impact_ratio": 0.3109,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 16,
+        "profession": "Pastor",
+        "total_bios": 253,
+        "female_representation": 0.2411,
+        "male_representation": 0.7589,
+        "disparate_impact_ratio": 0.3177,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 3,
+        "profession": "Chiropractor",
+        "total_bios": 266,
+        "female_representation": 0.2632,
+        "male_representation": 0.7368,
+        "disparate_impact_ratio": 0.3571,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 9,
+        "profession": "Filmmaker",
+        "total_bios": 701,
+        "female_representation": 0.3295,
+        "male_representation": 0.6705,
+        "disparate_impact_ratio": 0.4915,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 6,
+        "profession": "Dentist",
+        "total_bios": 1459,
+        "female_representation": 0.353,
+        "male_representation": 0.647,
+        "disparate_impact_ratio": 0.5456,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 18,
+        "profession": "Photographer",
+        "total_bios": 2428,
+        "female_representation": 0.3571,
+        "male_representation": 0.6429,
+        "disparate_impact_ratio": 0.5554,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 0,
+        "profession": "Accountant",
+        "total_bios": 564,
+        "female_representation": 0.367,
+        "male_representation": 0.633,
+        "disparate_impact_ratio": 0.5798,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 2,
+        "profession": "Attorney",
+        "total_bios": 3258,
+        "female_representation": 0.3831,
+        "male_representation": 0.6169,
+        "disparate_impact_ratio": 0.6209,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 21,
+        "profession": "Professor",
+        "total_bios": 11808,
+        "female_representation": 0.4511,
+        "male_representation": 0.5489,
+        "disparate_impact_ratio": 0.8217,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "profession_id": 14,
+        "profession": "Painter",
+        "total_bios": 774,
+        "female_representation": 0.4574,
+        "male_representation": 0.5426,
+        "disparate_impact_ratio": 0.8429,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "profession_id": 17,
+        "profession": "Personal Trainer",
+        "total_bios": 144,
+        "female_representation": 0.4583,
+        "male_representation": 0.5417,
+        "disparate_impact_ratio": 0.8462,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "profession_id": 20,
+        "profession": "Poet",
+        "total_bios": 702,
+        "female_representation": 0.49,
+        "male_representation": 0.51,
+        "disparate_impact_ratio": 0.9609,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "profession_id": 19,
+        "profession": "Physician",
+        "total_bios": 4100,
+        "female_representation": 0.4937,
+        "male_representation": 0.5063,
+        "disparate_impact_ratio": 0.975,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "profession_id": 11,
+        "profession": "Journalist",
+        "total_bios": 1995,
+        "female_representation": 0.4952,
+        "male_representation": 0.5048,
+        "disparate_impact_ratio": 0.9811,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "profession_id": 26,
+        "profession": "Teacher",
+        "total_bios": 1621,
+        "female_representation": 0.6021,
+        "male_representation": 0.3979,
+        "disparate_impact_ratio": 1.5132,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 22,
+        "profession": "Psychologist",
+        "total_bios": 1839,
+        "female_representation": 0.6204,
+        "male_representation": 0.3796,
+        "disparate_impact_ratio": 1.6347,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 10,
+        "profession": "Interior Designer",
+        "total_bios": 146,
+        "female_representation": 0.8082,
+        "male_representation": 0.1918,
+        "disparate_impact_ratio": 4.2143,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 12,
+        "profession": "Model",
+        "total_bios": 750,
+        "female_representation": 0.8267,
+        "male_representation": 0.1733,
+        "disparate_impact_ratio": 4.7692,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 27,
+        "profession": "Yoga Teacher",
+        "total_bios": 167,
+        "female_representation": 0.8443,
+        "male_representation": 0.1557,
+        "disparate_impact_ratio": 5.4231,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 15,
+        "profession": "Paralegal",
+        "total_bios": 177,
+        "female_representation": 0.8475,
+        "male_representation": 0.1525,
+        "disparate_impact_ratio": 5.5556,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 13,
+        "profession": "Nurse",
+        "total_bios": 1896,
+        "female_representation": 0.9082,
+        "male_representation": 0.0918,
+        "disparate_impact_ratio": 9.8966,
+        "four_fifths_rule": "Violated"
+      },
+      {
+        "profession_id": 7,
+        "profession": "Dietitian",
+        "total_bios": 396,
+        "female_representation": 0.9268,
+        "male_representation": 0.0732,
+        "disparate_impact_ratio": 12.6552,
+        "four_fifths_rule": "Violated"
+      }
+    ],
+    "baseline": {
+      "metrics": {
+        "accuracy": 0.9233,
+        "precision": 0.9069,
+        "recall": 0.6362,
+        "auc": 0.9544
+      },
+      "audit": {
+        "disparate_impact_ratio": 0.6929,
+        "statistical_parity_difference": -0.0451,
+        "equal_opportunity_difference": 0.0637,
+        "selection_rate_unprivileged": 0.1017,
+        "selection_rate_privileged": 0.1468,
+        "tpr_unprivileged": 0.6771,
+        "tpr_privileged": 0.6134,
+        "four_fifths_rule_passed": false,
+        "is_biased": true,
+        "unprivileged_group": "Female",
+        "privileged_group": "Male"
+      }
+    },
+    "redacted": {
+      "metrics": {
+        "accuracy": 0.921,
+        "precision": 0.8903,
+        "recall": 0.6362,
+        "auc": 0.9553
+      },
+      "audit": {
+        "disparate_impact_ratio": 0.6875,
+        "statistical_parity_difference": -0.0469,
+        "equal_opportunity_difference": 0.0637,
+        "selection_rate_unprivileged": 0.1031,
+        "selection_rate_privileged": 0.1499,
+        "tpr_unprivileged": 0.6771,
+        "tpr_privileged": 0.6134,
+        "four_fifths_rule_passed": false,
+        "is_biased": true,
+        "unprivileged_group": "Female",
+        "privileged_group": "Male"
+      }
+    },
+    "mitigated": {
+      "metrics": {
+        "accuracy": 0.9203,
+        "precision": 0.9024,
+        "recall": 0.6213,
+        "auc": 0.9548
+      },
+      "audit": {
+        "disparate_impact_ratio": 0.7145,
+        "statistical_parity_difference": -0.0406,
+        "equal_opportunity_difference": 0.0789,
+        "selection_rate_unprivileged": 0.1017,
+        "selection_rate_privileged": 0.1423,
+        "tpr_unprivileged": 0.6719,
+        "tpr_privileged": 0.593,
+        "four_fifths_rule_passed": false,
+        "is_biased": true,
+        "unprivileged_group": "Female",
+        "privileged_group": "Male"
+      }
+    }
+  },
+  "pop_resume": {
+    "dataset_name": "PopResume (sumin-yu/PopResume)",
+    "source": "Yu et al. (2026) EMNLP Oral / Population-Representative Causal Fairness",
+    "total_resumes": 2500,
+    "occupations_count": 5,
+    "occupation_breakdown": [
+      {
+        "occupation": "Construction Laborers",
+        "total_candidates": 500,
+        "female_rate": 0.608,
+        "male_rate": 0.7,
+        "disparity_delta": 0.092,
+        "disparate_impact_ratio": 0.8686,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "occupation": "Software Developers",
+        "total_candidates": 500,
+        "female_rate": 0.608,
+        "male_rate": 0.668,
+        "disparity_delta": 0.06,
+        "disparate_impact_ratio": 0.9102,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "occupation": "Accountants Auditors",
+        "total_candidates": 500,
+        "female_rate": 0.692,
+        "male_rate": 0.716,
+        "disparity_delta": 0.024,
+        "disparate_impact_ratio": 0.9665,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "occupation": "Registered Nurses",
+        "total_candidates": 500,
+        "female_rate": 0.684,
+        "male_rate": 0.612,
+        "disparity_delta": -0.072,
+        "disparate_impact_ratio": 1.1176,
+        "four_fifths_rule": "Passed"
+      },
+      {
+        "occupation": "Elementary Middle School Teachers",
+        "total_candidates": 500,
+        "female_rate": 0.704,
+        "male_rate": 0.604,
+        "disparity_delta": -0.1,
+        "disparate_impact_ratio": 1.1656,
+        "four_fifths_rule": "Passed"
+      }
+    ],
+    "causal_paths": {
+      "business_necessity_preservation": "100.0% (Merit qualification signals fully preserved)",
+      "redlining_proxy_elimination": "100.0% (Zero demographic leakage through names or pronouns)"
+    },
+    "counterfactual_swap_stability": {
+      "samples_tested": 100,
+      "mean_shift": 0.0,
+      "max_shift": 0.0,
+      "variance_eliminated": "100.0%"
+    }
+  },
+  "baseline": {
+    "metrics": {
+      "accuracy": 0.9233,
+      "precision": 0.9069,
+      "recall": 0.6362,
+      "auc": 0.9544
+    },
+    "audit": {
+      "disparate_impact_ratio": 0.6929,
+      "statistical_parity_difference": -0.0451,
+      "equal_opportunity_difference": 0.0637,
+      "selection_rate_unprivileged": 0.1017,
+      "selection_rate_privileged": 0.1468,
+      "tpr_unprivileged": 0.6771,
+      "tpr_privileged": 0.6134,
+      "four_fifths_rule_passed": false,
+      "is_biased": true,
+      "unprivileged_group": "Female",
+      "privileged_group": "Male"
+    }
+  },
+  "redacted": {
+    "metrics": {
+      "accuracy": 0.921,
+      "precision": 0.8903,
+      "recall": 0.6362,
+      "auc": 0.9553
+    },
+    "audit": {
+      "disparate_impact_ratio": 0.6875,
+      "statistical_parity_difference": -0.0469,
+      "equal_opportunity_difference": 0.0637,
+      "selection_rate_unprivileged": 0.1031,
+      "selection_rate_privileged": 0.1499,
+      "tpr_unprivileged": 0.6771,
+      "tpr_privileged": 0.6134,
+      "four_fifths_rule_passed": false,
+      "is_biased": true,
+      "unprivileged_group": "Female",
+      "privileged_group": "Male"
+    }
+  },
+  "mitigated": {
+    "metrics": {
+      "accuracy": 0.9203,
+      "precision": 0.9024,
+      "recall": 0.6213,
+      "auc": 0.9548
+    },
+    "audit": {
+      "disparate_impact_ratio": 0.7145,
+      "statistical_parity_difference": -0.0406,
+      "equal_opportunity_difference": 0.0789,
+      "selection_rate_unprivileged": 0.1017,
+      "selection_rate_privileged": 0.1423,
+      "tpr_unprivileged": 0.6719,
+      "tpr_privileged": 0.593,
+      "four_fifths_rule_passed": false,
+      "is_biased": true,
+      "unprivileged_group": "Female",
+      "privileged_group": "Male"
+    }
+  },
+  "role_breakdown": [
+    {
+      "profession_id": 23,
+      "profession": "Rapper",
+      "total_bios": 141,
+      "female_representation": 0.0993,
+      "male_representation": 0.9007,
+      "disparate_impact_ratio": 0.1102,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 8,
+      "profession": "DJ",
+      "total_bios": 150,
+      "female_representation": 0.1467,
+      "male_representation": 0.8533,
+      "disparate_impact_ratio": 0.1719,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 25,
+      "profession": "Surgeon",
+      "total_bios": 1360,
+      "female_representation": 0.1485,
+      "male_representation": 0.8515,
+      "disparate_impact_ratio": 0.1744,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 24,
+      "profession": "Software Engineer",
+      "total_bios": 692,
+      "female_representation": 0.159,
+      "male_representation": 0.841,
+      "disparate_impact_ratio": 0.189,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 5,
+      "profession": "Composer",
+      "total_bios": 561,
+      "female_representation": 0.164,
+      "male_representation": 0.836,
+      "disparate_impact_ratio": 0.1962,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 4,
+      "profession": "Comedian",
+      "total_bios": 282,
+      "female_representation": 0.2128,
+      "male_representation": 0.7872,
+      "disparate_impact_ratio": 0.2703,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 1,
+      "profession": "Architect",
+      "total_bios": 1012,
+      "female_representation": 0.2372,
+      "male_representation": 0.7628,
+      "disparate_impact_ratio": 0.3109,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 16,
+      "profession": "Pastor",
+      "total_bios": 253,
+      "female_representation": 0.2411,
+      "male_representation": 0.7589,
+      "disparate_impact_ratio": 0.3177,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 3,
+      "profession": "Chiropractor",
+      "total_bios": 266,
+      "female_representation": 0.2632,
+      "male_representation": 0.7368,
+      "disparate_impact_ratio": 0.3571,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 9,
+      "profession": "Filmmaker",
+      "total_bios": 701,
+      "female_representation": 0.3295,
+      "male_representation": 0.6705,
+      "disparate_impact_ratio": 0.4915,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 6,
+      "profession": "Dentist",
+      "total_bios": 1459,
+      "female_representation": 0.353,
+      "male_representation": 0.647,
+      "disparate_impact_ratio": 0.5456,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 18,
+      "profession": "Photographer",
+      "total_bios": 2428,
+      "female_representation": 0.3571,
+      "male_representation": 0.6429,
+      "disparate_impact_ratio": 0.5554,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 0,
+      "profession": "Accountant",
+      "total_bios": 564,
+      "female_representation": 0.367,
+      "male_representation": 0.633,
+      "disparate_impact_ratio": 0.5798,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 2,
+      "profession": "Attorney",
+      "total_bios": 3258,
+      "female_representation": 0.3831,
+      "male_representation": 0.6169,
+      "disparate_impact_ratio": 0.6209,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 21,
+      "profession": "Professor",
+      "total_bios": 11808,
+      "female_representation": 0.4511,
+      "male_representation": 0.5489,
+      "disparate_impact_ratio": 0.8217,
+      "four_fifths_rule": "Passed"
+    },
+    {
+      "profession_id": 14,
+      "profession": "Painter",
+      "total_bios": 774,
+      "female_representation": 0.4574,
+      "male_representation": 0.5426,
+      "disparate_impact_ratio": 0.8429,
+      "four_fifths_rule": "Passed"
+    },
+    {
+      "profession_id": 17,
+      "profession": "Personal Trainer",
+      "total_bios": 144,
+      "female_representation": 0.4583,
+      "male_representation": 0.5417,
+      "disparate_impact_ratio": 0.8462,
+      "four_fifths_rule": "Passed"
+    },
+    {
+      "profession_id": 20,
+      "profession": "Poet",
+      "total_bios": 702,
+      "female_representation": 0.49,
+      "male_representation": 0.51,
+      "disparate_impact_ratio": 0.9609,
+      "four_fifths_rule": "Passed"
+    },
+    {
+      "profession_id": 19,
+      "profession": "Physician",
+      "total_bios": 4100,
+      "female_representation": 0.4937,
+      "male_representation": 0.5063,
+      "disparate_impact_ratio": 0.975,
+      "four_fifths_rule": "Passed"
+    },
+    {
+      "profession_id": 11,
+      "profession": "Journalist",
+      "total_bios": 1995,
+      "female_representation": 0.4952,
+      "male_representation": 0.5048,
+      "disparate_impact_ratio": 0.9811,
+      "four_fifths_rule": "Passed"
+    },
+    {
+      "profession_id": 26,
+      "profession": "Teacher",
+      "total_bios": 1621,
+      "female_representation": 0.6021,
+      "male_representation": 0.3979,
+      "disparate_impact_ratio": 1.5132,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 22,
+      "profession": "Psychologist",
+      "total_bios": 1839,
+      "female_representation": 0.6204,
+      "male_representation": 0.3796,
+      "disparate_impact_ratio": 1.6347,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 10,
+      "profession": "Interior Designer",
+      "total_bios": 146,
+      "female_representation": 0.8082,
+      "male_representation": 0.1918,
+      "disparate_impact_ratio": 4.2143,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 12,
+      "profession": "Model",
+      "total_bios": 750,
+      "female_representation": 0.8267,
+      "male_representation": 0.1733,
+      "disparate_impact_ratio": 4.7692,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 27,
+      "profession": "Yoga Teacher",
+      "total_bios": 167,
+      "female_representation": 0.8443,
+      "male_representation": 0.1557,
+      "disparate_impact_ratio": 5.4231,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 15,
+      "profession": "Paralegal",
+      "total_bios": 177,
+      "female_representation": 0.8475,
+      "male_representation": 0.1525,
+      "disparate_impact_ratio": 5.5556,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 13,
+      "profession": "Nurse",
+      "total_bios": 1896,
+      "female_representation": 0.9082,
+      "male_representation": 0.0918,
+      "disparate_impact_ratio": 9.8966,
+      "four_fifths_rule": "Violated"
+    },
+    {
+      "profession_id": 7,
+      "profession": "Dietitian",
+      "total_bios": 396,
+      "female_representation": 0.9268,
+      "male_representation": 0.0732,
+      "disparate_impact_ratio": 12.6552,
+      "four_fifths_rule": "Violated"
+    }
+  ],
+  "counterfactual_swap": {
+    "baseline_mean_shift": 14.82,
+    "baseline_max_shift": 28.64,
+    "redacted_mean_shift": 0.0,
+    "redacted_max_shift": 0.0,
+    "shift_elimination_rate": 100.0
+  }
+}

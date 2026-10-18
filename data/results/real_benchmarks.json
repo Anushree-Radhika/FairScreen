@@ -1,0 +1,21 @@
+{
+  "real_resumes": {
+    "dataset_name": "Kaggle Real Resumes (UpdatedResumeDataSet)",
+    "sample_size": 962,
+    "categories_count": 25,
+    "target_screened_category": "Tech",
+    "raw_text_performance": {
+      "accuracy": 0.9876,
+      "precision": 1.0,
+      "recall": 0.9538,
+      "auc": 0.9917
+    },
+    "redacted_text_performance": {
+      "accuracy": 0.9876,
+      "precision": 1.0,
+      "recall": 0.9538,
+      "auc": 0.9917
+    },
+    "utility_preservation": 1.0
+  }
+}
