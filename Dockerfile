@@ -5,7 +5,7 @@ WORKDIR /app
 # Suppress interactive debconf prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install core build dependencies and git
+# Install compilers, git, and required system development libraries for s390x
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     build-essential \
@@ -26,15 +26,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt .
 
-# Ensure pyarrow is removed from requirements
+# Remove any indirect pyarrow requirement if present
 RUN sed -i '/pyarrow/d' requirements.txt
 
-# Upgrade pip build tools
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+# Upgrade pip and pre-install build backend dependencies (fixes meson-python error)
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel meson-python meson ninja
 
-# Install dependencies while telling pip NOT to attempt building pyarrow
-RUN pip install --no-cache-dir --no-deps-check -r requirements.txt || \
-    pip install --no-cache-dir --no-build-isolation -r requirements.txt
+# Install application dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
