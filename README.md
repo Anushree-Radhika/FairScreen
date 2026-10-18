@@ -30,6 +30,7 @@ FairScreen/
 │   ├── audit.py                  # AIF360 parity metrics & counterfactual swap test
 │   ├── mitigate.py               # AIF360 sample reweighing mitigation
 │   ├── explain.py                # Merit-based token coefficient explainer
+│   ├── project_analyzer.py       # Projects section parser & ATS role alignment engine
 │   └── train_all.py              # Single command to train and audit all models
 │
 ├── models/                       # SERIALIZED ARTIFACTS (.pkl)

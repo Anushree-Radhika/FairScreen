@@ -37,6 +37,7 @@ FairScreen provides an interactive multi-tab dashboard (accessible at `http://lo
 * **💡 Merit-Based Explainability**:
   - **🟢 Positive Drivers Table**: Identifies specific technical competency tokens extracted from the PDF that boosted the score (e.g., `python (+0.42)`, `kubernetes (+0.38)`).
   - **🔴 Missing Qualifications Table**: Highlights critical skill gaps relative to successful applicants in the chosen role.
+* **Projects Evaluation & ATS Role Alignment**: Specifically extracts and parses the candidate's **Projects** section. Categorizes the project portfolio into archetypes (e.g., Cloud & Distributed Systems, Full-Stack Architecture, AI/ML Pipelines, Systems/Embedded, Clinical Protocols, Financial ERPs) and calculates a **Project ATS Match Score (0–100%)** with tailored ATS recruiter feedback, execution signals (metrics & deployment links), and actionable recommendations for the target role.
 * **Role Benchmarks & Recruiter Notes**: Automatically compares the candidate against authentic selection rates and real recruiter notes from population benchmarks in that specific role.
 * **Raw vs. Redacted Inspector**: Side-by-side expandable viewer showing the exact text extracted from the PDF versus the sanitized text evaluated by the model.
 
