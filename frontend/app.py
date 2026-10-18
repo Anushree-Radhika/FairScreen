@@ -273,6 +273,31 @@ with tabs[0]:
         pop_score = scores.get("pop_resume", {}).get("probability", 0.0)
         pop_pct = scores.get("pop_resume", {}).get("selection_percentage", pop_score * 100)
         red_score = scores.get("redacted", {}).get("probability", 0.0)
+        red_pct = red_score * 100
+
+        # Primary Overall Verdict Banner with Exact Percentages
+        is_pop_pass = bool(scores.get("pop_resume", {}).get("shortlisted", pop_pct >= 50.0))
+        is_fair_pass = bool(scores.get("redacted", {}).get("shortlisted", red_pct >= 50.0))
+
+        if is_pop_pass and is_fair_pass:
+            st.success(
+                f"### ✅ Candidate Status: SHORTLISTED ({pop_pct:.1f}% Selection Probability | {red_pct:.1f}% Fair Merit Score)\n"
+                f"Candidate qualifications exceed the 50.0% competitive cutoff for **{target_role}**."
+            )
+        elif is_pop_pass or is_fair_pass:
+            higher_pct = max(pop_pct, red_pct)
+            st.info(
+                f"### 🔍 Candidate Status: UNDER REVIEW — CONDITIONAL PASS ({higher_pct:.1f}% Score)\n"
+                f"Candidate qualifies on Fair Merit ({red_pct:.1f}%), with population hiring likelihood at **{pop_pct:.1f}%**. Recommended for recruiter interview."
+            )
+        else:
+            gap = 50.0 - pop_pct
+            tier_desc = "Borderline Review (Foundational skills present, missing secondary stack)" if pop_pct >= 35.0 else "Qualification Gap (Divergence from cohort requirements)"
+            st.warning(
+                f"### 🔍 Candidate Status: UNDER REVIEW — {pop_pct:.1f}% SELECTION PROBABILITY\n"
+                f"**Score: {pop_pct:.1f}%** | **Shortlist Cutoff: 50.0%** (Gap: **-{gap:.1f}%**) — *{tier_desc}*. "
+                f"Review missing qualifications below for specific skill additions."
+            )
 
         col_res1, col_res2, col_res3 = st.columns(3)
 
@@ -281,9 +306,10 @@ with tabs[0]:
             st.caption("Historical AI (Bias in Bios) — raw text with real names & pronouns")
             st.metric("Historical Alignment", f"{base_score * 100:.1f}%")
             if scores.get("baseline", {}).get("shortlisted"):
-                st.success("Shortlisted (Biased)")
+                st.success(f"Shortlisted: {base_score * 100:.1f}% (Biased AI)")
             else:
-                st.error("Not Shortlisted (Biased)")
+                st.error(f"Not Shortlisted: {base_score * 100:.1f}% (Biased AI)")
+            st.progress(min(max(base_score, 0.0), 1.0))
             st.caption("Reflects systemic gender and occupational stereotypes from unredacted web biographies.")
 
         with col_res2:
@@ -295,9 +321,11 @@ with tabs[0]:
                 help="Calibrated percentage of getting selected based on skills, education, and career experience."
             )
             if scores.get("pop_resume", {}).get("shortlisted"):
-                st.success("✅ Likely Selected (Merit)")
+                st.success(f"✅ Likely Selected: {pop_pct:.1f}% (Cutoff ≥ 50%)")
             else:
-                st.warning("🔍 Under Review (Competitive)")
+                gap = 50.0 - pop_pct
+                st.warning(f"🔍 Under Review: {pop_pct:.1f}% (Shortlist Gap: -{gap:.1f}%)")
+            st.progress(min(max(pop_pct / 100.0, 0.0), 1.0))
             st.caption("Trained on 2,500 population-calibrated resumes across major occupational sectors.")
 
         with col_res3:
@@ -305,13 +333,15 @@ with tabs[0]:
             st.caption("Identity-neutral text + AIF360 sample reweighed")
             st.metric(
                 "Fair Screen Score",
-                f"{red_score * 100:.1f}%",
+                f"{red_pct:.1f}%",
                 delta=f"{(red_score - base_score)*100:+.1f}% vs Baseline"
             )
             if scores.get("redacted", {}).get("shortlisted"):
-                st.success("✅ Shortlisted (Fair)")
+                st.success(f"✅ Shortlisted: {red_pct:.1f}% (Fair Pass ≥ 50%)")
             else:
-                st.warning("🔍 Under Review (Fair)")
+                fair_gap = 50.0 - red_pct
+                st.warning(f"🔍 Under Review: {red_pct:.1f}% (Shortlist Gap: -{fair_gap:.1f}%)")
+            st.progress(min(max(red_score, 0.0), 1.0))
             st.caption("Zero demographic variance (0.0% swing on name swap). Title VII compliant.")
 
         # Explainability
@@ -335,6 +365,74 @@ with tabs[0]:
                 st.dataframe(pd.DataFrame(neg_drivers), use_container_width=True)
             else:
                 st.write("No significant negative signals.")
+
+        # ── PROJECTS & ATS ROLE ALIGNMENT ──────────────────────────────
+        proj_analysis = screen_results.get("project_analysis", {})
+        if proj_analysis:
+            st.markdown("---")
+            st.subheader(f"🛠️ Projects Evaluation & ATS Role Alignment — {target_role}")
+            st.caption(
+                f"How an enterprise ATS evaluates your candidate's project portfolio, practical stack depth, "
+                f"and architectural complexity specifically for **{target_role}**."
+            )
+
+            p_col1, p_col2, p_col3 = st.columns([1.2, 1.4, 1.4])
+            
+            p_score = proj_analysis.get("project_ats_score", 50.0)
+            p_tier = proj_analysis.get("alignment_tier", "Moderate Alignment")
+            p_arch = proj_analysis.get("primary_archetype", "General Engineering")
+            
+            p_col1.metric("Project ATS Match Score", f"{p_score:.1f}%", help="Calculated from project tech stack, architectural complexity, and role alignment")
+            p_col2.metric("Project Domain / Archetype", p_arch)
+            
+            has_sec = proj_analysis.get("has_projects_section", False)
+            sec_status = "✅ Dedicated Section Found" if has_sec else "⚠️ Inferred from Text"
+            p_col3.metric("Section Status", sec_status, help="Dedicated 'Projects' section heading makes parsing reliable in ATS engines")
+
+            # ATS Recruiter Reply Card
+            badge_bg = proj_analysis.get("badge_bg", "#f0f6ff")
+            tier_color = proj_analysis.get("tier_color", "#1e3a8a")
+            suitability = proj_analysis.get("role_suitability", f"Role Alignment for {target_role}")
+
+            st.markdown(
+                f"<div style='background:{badge_bg}; border:1px solid {tier_color}40; border-left:5px solid {tier_color}; "
+                f"border-radius:10px; padding:1.2rem; margin:0.8rem 0 1.2rem 0; color:#0f172a;'>"
+                f"<div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;'>"
+                f"<h4 style='margin:0; color:{tier_color}; font-size:1.1rem;'>🎯 ATS Scorer Assessment: {p_tier}</h4>"
+                f"<span style='background:{tier_color}; color:white; font-size:0.8rem; font-weight:700; padding:3px 10px; border-radius:12px;'>{suitability}</span>"
+                f"</div>"
+                f"<p style='color:#334155; font-size:0.95rem; line-height:1.55; margin-top:0.4rem;'>{proj_analysis.get('ats_recruiter_reply', '')}</p>"
+                f"</div>",
+                unsafe_allow_html=True
+            )
+
+            # Details: Matched Tools & Recommendations
+            sub_c1, sub_c2 = st.columns(2)
+            with sub_c1:
+                st.markdown("**🧰 Technologies & Tools Detected in Projects**")
+                tools = proj_analysis.get("matched_technologies", [])
+                if tools:
+                    chips_html = "".join(
+                        f"<span style='display:inline-block; background:#e0e7ff; color:#3730a3; padding:3px 10px; margin:3px; border-radius:12px; font-size:0.82rem; font-weight:600;'>{t}</span>"
+                        for t in tools
+                    )
+                    st.markdown(f"<div style='margin-bottom:0.8rem;'>{chips_html}</div>", unsafe_allow_html=True)
+                else:
+                    st.write("No specialized project technology keywords identified.")
+
+                st.markdown("**📈 Project Depth & Execution Signals**")
+                has_met = proj_analysis.get("has_metrics", False)
+                has_dep = proj_analysis.get("has_deployment", False)
+                metric_samples = proj_analysis.get("metric_samples", [])
+                samples_str = f" ({', '.join(metric_samples)})" if metric_samples else ""
+                st.write(f"- Quantitative Impact Metrics: {'✅ Found' + samples_str if has_met else '⚠️ Missing (e.g., latency reduction, user volume)'}")
+                st.write(f"- Deployment / Production Linkage: {'✅ Detected (live URL, cloud or repo reference)' if has_dep else '⚠️ Missing (no live demo or repo references)'}")
+
+            with sub_c2:
+                st.markdown(f"**💡 ATS Recommendations to Level Up Project Score for {target_role}**")
+                recs = proj_analysis.get("ats_recommendations", [])
+                for r in recs:
+                    st.write(f"- {r}")
 
         # Role benchmarks
         role_insights = screen_results.get("role_insights", screen_results.get("kaggle_role_insights", {}))

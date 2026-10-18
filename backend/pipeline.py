@@ -8,6 +8,7 @@ from backend.ingest import extract_text_from_pdf, extract_sections, clean_text
 from ml.redact import redact
 from ml.model import load_model_artifacts
 from ml.explain import explain
+from ml.project_analyzer import analyze_candidate_projects
 
 MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "data" / "results"
@@ -186,6 +187,9 @@ class FairScreenPipeline:
             # Role insights
             role_to_check = target_role if target_role else "Software Developers"
             insights = self.get_role_decision_insights(role_to_check)
+
+            # Deep Projects Section ATS Evaluation
+            project_analysis = analyze_candidate_projects(clean, sections, target_role=role_to_check)
             
             results.update({
                 "scores": {
@@ -211,6 +215,7 @@ class FairScreenPipeline:
                     }
                 },
                 "explanation": explanation_data,
+                "project_analysis": project_analysis,
                 "role_insights": insights,
                 "kaggle_role_insights": insights
             })
