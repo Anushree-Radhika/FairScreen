@@ -352,6 +352,46 @@ def get_theme_css(theme: str) -> str:
     li[role="option"][data-highlighted="true"] {
         background-color: #e2e8f0 !important;
     }
+        /* All secondary buttons (e.g. Upload New Resume): dark background, white text */
+    .stButton > button[kind="secondary"],
+    button[data-testid="stBaseButton-secondary"] {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border: 1px solid #334155 !important;
+    }
+    .stButton > button[kind="secondary"] *,
+    button[data-testid="stBaseButton-secondary"] * {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    .stButton > button[kind="secondary"]:hover,
+    button[data-testid="stBaseButton-secondary"]:hover {
+        background-color: #334155 !important;
+        border-color: #38bdf8 !important;
+    }
+    
+    /* Expander header: dark background, white text */
+    [data-testid="stExpander"] details,
+    [data-testid="stExpander"] summary,
+    [data-testid="stExpander"] details > summary {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    [data-testid="stExpander"] summary *,
+    [data-testid="stExpander"] summary p,
+    [data-testid="stExpander"] summary span {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    [data-testid="stExpander"] summary svg {
+        fill: #ffffff !important;
+        color: #ffffff !important;
+    }
+    [data-testid="stExpander"] summary:hover {
+        background-color: #334155 !important;
+    }
     /* Tables */
     table, tr, td, th {
         color: #ffffff !important;
@@ -388,14 +428,13 @@ def get_theme_css(theme: str) -> str:
         font-weight: bold;
     }
     
-        /* Header bar: blend with dark UI */
+       /* Header bar: blend with dark UI */
     header[data-testid="stHeader"],
     [data-testid="stHeader"] {
         background: #0b0f19 !important;
         background-color: #0b0f19 !important;
     }
 
-    /* Keep header icons (sidebar expand arrow, toolbar menu) visible on dark */
     [data-testid="stToolbar"] button,
     [data-testid="stToolbar"] svg,
     [data-testid="stExpandSidebarButton"],
@@ -408,17 +447,6 @@ def get_theme_css(theme: str) -> str:
     }
 
     [data-testid="stDecoration"] {display: none !important;}
-
-    /* Sidebar buttons (e.g. Rerun App): dark background so white text is visible */
-    section[data-testid="stSidebar"] .stButton > button,
-    section[data-testid="stSidebar"] [data-testid^="stBaseButton"] {
-        background-color: #1e293b !important;
-        border: 1px solid #334155 !important;
-    }
-    section[data-testid="stSidebar"] .stButton > button:hover,
-    section[data-testid="stSidebar"] [data-testid^="stBaseButton"]:hover {
-        border-color: #38bdf8 !important;
-    }
 </style>
 """
     else:
