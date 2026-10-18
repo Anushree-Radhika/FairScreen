@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import pandas as pd
 from pathlib import Path
 
 # Add project root to sys.path so modules import reliably
@@ -834,7 +835,7 @@ with tabs[0]:
             pos_drivers = explanation.get("positive_drivers", [])
             if pos_drivers:
                 st.dataframe(pd.DataFrame(pos_drivers), use_container_width=True)
-                            st.dataframe(pos_drivers, use_container_width=True)
+                            #st.dataframe(pos_drivers, use_container_width=True)
             else:
                 st.write("No strong positive skill markers detected.")
         with exp_col2:
@@ -842,7 +843,7 @@ with tabs[0]:
             neg_drivers = explanation.get("negative_drivers", [])
             if neg_drivers:
                 st.dataframe(pd.DataFrame(neg_drivers), use_container_width=True)
-                            st.dataframe(neg_drivers, use_container_width=True)
+                           # st.dataframe(neg_drivers, use_container_width=True)
             else:
                 st.write("No significant negative signals.")
 
@@ -1136,7 +1137,7 @@ with tabs[1]:
             }
         ]
         st.dataframe(pd.DataFrame(model_comparison), use_container_width=True)
-    st.dataframe(model_comparison, use_container_width=True)
+        st.dataframe(model_comparison, use_container_width=True)
 
         st.markdown("---")
 
