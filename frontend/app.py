@@ -98,24 +98,103 @@ def get_theme_css(theme: str) -> str:
     }
     
     /* File Uploader Dropzone in Dark Mode */
-    [data-testid="stFileUploadDropzone"], .stFileUploader section {
+    .stFileUploader,
+    .stFileUploader *,
+    [data-testid="stFileUploader"],
+    [data-testid="stFileUploader"] *,
+    [data-testid="stFileUploaderDropzone"],
+    [data-testid="stFileUploadDropzone"],
+    section[data-testid="stFileUploadDropzone"],
+    .stFileUploader section,
+    .stFileUploader section * {
         background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    .stFileUploader section,
+    [data-testid="stFileUploadDropzone"],
+    [data-testid="stFileUploaderDropzone"] {
         border: 2px dashed #64748b !important;
-        color: #ffffff !important;
     }
-    [data-testid="stFileUploadDropzone"] *, .stFileUploader section * {
-        color: #ffffff !important;
-    }
-    [data-testid="stFileUploadDropzone"] button, .stFileUploader button {
+    [data-testid="stFileUploader"] button,
+    [data-testid="stFileUploaderDropzone"] button,
+    [data-testid="stFileUploadDropzone"] button,
+    .stFileUploader button {
         background-color: #334155 !important;
         color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
         border: 1px solid #64748b !important;
+    }
+    
+    /* Pure White Text for Textarea, Resume Pasting Space & Labels */
+    .stTextArea,
+    .stTextArea *,
+    .stTextArea label,
+    .stTextArea label p,
+    .stTextArea label span,
+    .stTextArea div,
+    [data-testid="stTextArea"],
+    [data-testid="stTextArea"] *,
+    [data-testid="stTextArea"] label,
+    [data-testid="stTextArea"] label p,
+    [data-testid="stTextArea"] label span,
+    [data-testid="stWidgetLabel"],
+    [data-testid="stWidgetLabel"] *,
+    [data-testid="stWidgetLabel"] label,
+    [data-testid="stWidgetLabel"] p,
+    [data-testid="stWidgetLabel"] span,
+    label[data-testid="stWidgetLabel"],
+    label[data-testid="stWidgetLabel"] *,
+    .stTextArea [data-testid="stMarkdownContainer"],
+    .stTextArea [data-testid="stMarkdownContainer"] *,
+    .stTextArea [data-testid="stMarkdownContainer"] p,
+    [data-testid="stWidgetLabel"] [data-testid="stMarkdownContainer"] p {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    
+    /* Textarea Box & User Typed / Pasted Content */
+    .stTextArea textarea,
+    [data-testid="stTextArea"] textarea,
+    [data-baseweb="textarea"],
+    [data-baseweb="textarea"] > div,
+    [data-baseweb="textarea"] textarea,
+    textarea {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        caret-color: #ffffff !important;
+        border: 1px solid #475569 !important;
+        font-size: 0.95rem !important;
+    }
+    
+    /* Textarea Focus State */
+    .stTextArea textarea:focus,
+    [data-testid="stTextArea"] textarea:focus,
+    [data-baseweb="textarea"] textarea:focus,
+    textarea:focus {
+        border-color: #38bdf8 !important;
+        box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3) !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    
+    /* Textarea Placeholder (Paste resume text here if you don't have a PDF...) */
+    .stTextArea textarea::placeholder,
+    [data-testid="stTextArea"] textarea::placeholder,
+    [data-baseweb="textarea"] textarea::placeholder,
+    textarea::placeholder,
+    input::placeholder {
+        color: #cbd5e1 !important;
+        -webkit-text-fill-color: #cbd5e1 !important;
+        opacity: 0.95 !important;
     }
     
     /* Code / PDF Preview */
     .code-preview-box {
         background: #0f172a !important;
         color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
         border: 1px solid #334155 !important;
         border-radius: 10px;
         padding: 1rem;
@@ -132,29 +211,35 @@ def get_theme_css(theme: str) -> str:
     }
     [data-testid="stMetricLabel"] {
         color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     
     /* Tabs */
     button[data-baseweb="tab"] {
-        color: #94a3b8 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     button[data-baseweb="tab"][aria-selected="true"] {
         color: #38bdf8 !important;
+        -webkit-text-fill-color: #38bdf8 !important;
         border-bottom-color: #38bdf8 !important;
     }
     
-    /* Form Inputs */
-    input, textarea, [data-baseweb="select"] {
+    /* Form Inputs & Selectbox */
+    input, [data-baseweb="select"], [data-baseweb="input"] {
         background-color: #1e293b !important;
-        color: #f8fafc !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
         border-color: #475569 !important;
     }
     [data-baseweb="popover"], [data-baseweb="menu"], ul[role="listbox"] {
         background-color: #1e293b !important;
-        color: #f8fafc !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     li[role="option"] {
-        color: #f8fafc !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
         background-color: #1e293b !important;
     }
     li[role="option"]:hover {
@@ -162,17 +247,20 @@ def get_theme_css(theme: str) -> str:
     }
     
     /* Tables */
-    table {
-        color: #f1f5f9 !important;
+    table, tr, td, th {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
     th {
         background-color: #1e293b !important;
         color: #38bdf8 !important;
+        -webkit-text-fill-color: #38bdf8 !important;
         border-color: #334155 !important;
     }
     td {
         background-color: #0f172a !important;
-        color: #e2e8f0 !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
         border-color: #334155 !important;
     }
     
@@ -403,11 +491,12 @@ if "target_role" not in st.session_state:
 with tabs[0]:
     # ── STEP 1: UPLOAD ──────────────────────────────────────────────────────────
     if st.session_state.screen_step == "upload":
-        st.markdown("""
+        upload_sub_color = "#e2e8f0" if (st.session_state.theme == "dark") else "#475569"
+        st.markdown(f"""
         <div style='text-align:center; padding: 1.5rem 0 0.5rem 0;'>
             <div style='font-size:3rem;'>📂</div>
             <h2 style='margin:0.3rem 0 0.2rem 0;'>Upload a Candidate Resume</h2>
-            <p style='color:#334155; font-size:0.95rem; font-weight: 500;'>Drop a PDF or paste text — FairScreen will read it, show you what's inside, then run a full fairness analysis.</p>
+            <p style='color:{upload_sub_color}; font-size:0.95rem; font-weight: 500;'>Drop a PDF or paste text — FairScreen will read it, show you what's inside, then run a full fairness analysis.</p>
         </div>
         """, unsafe_allow_html=True)
 
