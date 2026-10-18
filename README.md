@@ -22,7 +22,8 @@ FairScreen/
 │
 ├── ml/                           # ML & FAIRNESS ENGINE (100% Authentic Data)
 │   ├── __init__.py
-│   ├── train_recruitment_dataset.py # Trains on 10,174 real Kaggle recruitment resumes
+│   ├── bias_audit.py             # Audits Bias in Bios (138k bios) & PopResume (2.5k resumes)
+│   ├── build_popresume.py        # Deterministic generation of population-representative resumes
 │   ├── real_benchmark.py         # Evaluates 962 authentic multi-domain resumes
 │   ├── redact.py                 # Demographic & identity signal scrubber
 │   ├── features.py               # TF-IDF & merit-based feature engineering
@@ -30,22 +31,22 @@ FairScreen/
 │   ├── audit.py                  # AIF360 parity metrics & counterfactual swap test
 │   ├── mitigate.py               # AIF360 sample reweighing mitigation
 │   ├── explain.py                # Merit-based token coefficient explainer
-│   ├── jd_checker.py             # Gaucher et al. gender-coded wording audit
-│   └── train_all.py              # Single command to train all authentic models
+│   └── train_all.py              # Single command to train and audit all models
 │
-├── models/                       # SERIALIZED REAL ARTIFACTS (.pkl)
-│   ├── recruitment_baseline_model.pkl
-│   ├── recruitment_baseline_vectorizer.pkl
-│   ├── recruitment_redacted_model.pkl
-│   ├── recruitment_redacted_vectorizer.pkl
-│   ├── recruitment_mitigated_model.pkl
-│   └── recruitment_mitigated_vectorizer.pkl
+├── models/                       # SERIALIZED ARTIFACTS (.pkl)
+│   ├── bias_in_bios_baseline_model.pkl
+│   ├── bias_in_bios_baseline_vectorizer.pkl
+│   ├── pop_resume_model.pkl
+│   ├── pop_resume_vectorizer.pkl
+│   ├── bias_in_bios_mitigated_model.pkl
+│   └── bias_in_bios_mitigated_vectorizer.pkl
 │
-├── data/                         # DATASETS & WORD LISTS
-│   ├── kaggle_recruitment/       # 10,174 authentic candidate resumes & decisions
-│   ├── gendered_words.json       # Gaucher et al. masculine/feminine stems
+├── data/                         # DATASETS & BENCHMARKS (Downloaded Locally)
+│   ├── bias_in_bios/             # LabHC/bias_in_bios (138,711 real biographies, 28 professions)
+│   ├── pop_resume/               # sumin-yu/PopResume (2,500 population-representative resumes)
+│   ├── real_resumes.csv          # 962 authentic resumes for utility benchmarking
 │   ├── name_pools.json           # Diverse male/female names for swap tests
-│   └── results/                  # Cached audit parity benchmarks & role statistics
+│   └── results/                  # Cached bias audit benchmarks & role statistics
 │
 ├── app.py                        # Root launcher delegating to frontend/app.py
 ├── requirements.txt              # Frozen Python dependencies

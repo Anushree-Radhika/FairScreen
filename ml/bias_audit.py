@@ -160,10 +160,13 @@ def audit_bias_in_bios(sample_size: int = 12000) -> Dict[str, Any]:
         privileged_value="Male"
     )
 
-    # Save artifacts as production recruitment models
+    # Save artifacts as production recruitment & bias_in_bios models
     save_model_artifacts(vec_raw, clf_base, name_prefix="recruitment_baseline")
     save_model_artifacts(vec_red, clf_red, name_prefix="recruitment_redacted")
     save_model_artifacts(vec_red, clf_mit, name_prefix="recruitment_mitigated")
+    save_model_artifacts(vec_raw, clf_base, name_prefix="bias_in_bios_baseline")
+    save_model_artifacts(vec_red, clf_red, name_prefix="bias_in_bios_redacted")
+    save_model_artifacts(vec_red, clf_mit, name_prefix="bias_in_bios_mitigated")
 
     return {
         "dataset_name": "Bias in Bios (LabHC/bias_in_bios)",
@@ -228,6 +231,7 @@ def audit_pop_resume() -> Dict[str, Any]:
     vec_red = TfidfVectorizer(max_features=2500, stop_words="english")
     X_pop_red = vec_red.fit_transform([redact(t) for t in df_pop["resume_text"]])
     clf_pop = LogisticRegression(max_iter=1000, random_state=42).fit(X_pop_red, df_pop["hired"])
+    save_model_artifacts(vec_red, clf_pop, name_prefix="pop_resume")
     
     swap_diffs = []
     for _, row in sample_sub.iterrows():
