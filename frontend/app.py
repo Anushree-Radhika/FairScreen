@@ -352,6 +352,46 @@ def get_theme_css(theme: str) -> str:
     li[role="option"][data-highlighted="true"] {
         background-color: #e2e8f0 !important;
     }
+        /* All secondary buttons (e.g. Upload New Resume): dark background, white text */
+    .stButton > button[kind="secondary"],
+    button[data-testid="stBaseButton-secondary"] {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+        border: 1px solid #334155 !important;
+    }
+    .stButton > button[kind="secondary"] *,
+    button[data-testid="stBaseButton-secondary"] * {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    .stButton > button[kind="secondary"]:hover,
+    button[data-testid="stBaseButton-secondary"]:hover {
+        background-color: #334155 !important;
+        border-color: #38bdf8 !important;
+    }
+    
+    /* Expander header: dark background, white text */
+    [data-testid="stExpander"] details,
+    [data-testid="stExpander"] summary,
+    [data-testid="stExpander"] details > summary {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    [data-testid="stExpander"] summary *,
+    [data-testid="stExpander"] summary p,
+    [data-testid="stExpander"] summary span {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+    [data-testid="stExpander"] summary svg {
+        fill: #ffffff !important;
+        color: #ffffff !important;
+    }
+    [data-testid="stExpander"] summary:hover {
+        background-color: #334155 !important;
+    }
     /* Tables */
     table, tr, td, th {
         color: #ffffff !important;
@@ -388,19 +428,25 @@ def get_theme_css(theme: str) -> str:
         font-weight: bold;
     }
     
-    # /* White-Labeling */
-    # #MainMenu {visibility: hidden !important; display: none !important;}
-    # footer {visibility: hidden !important; display: none !important;}
-    # [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
-    # [data-testid="stDecoration"] {display: none !important;}
-    # header[data-testid="stHeader"] {background: transparent !important;}
-    # [class*="viewerBadge"],
-    # .viewerBadge_container__r5tak,
-    # .styles_viewerBadge__1yB5_,
-    # [data-testid="manage-app-button"],
-    # a[href*="github.com/Anushree-Radhika/FairScreen"] {
-    #     display: none !important;
-    # }
+       /* Header bar: blend with dark UI */
+    header[data-testid="stHeader"],
+    [data-testid="stHeader"] {
+        background: #0b0f19 !important;
+        background-color: #0b0f19 !important;
+    }
+
+    [data-testid="stToolbar"] button,
+    [data-testid="stToolbar"] svg,
+    [data-testid="stExpandSidebarButton"],
+    [data-testid="stExpandSidebarButton"] svg,
+    [data-testid="stSidebarCollapsedControl"] button,
+    [data-testid="stSidebarCollapsedControl"] svg {
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+
+    [data-testid="stDecoration"] {display: none !important;}
 </style>
 """
     else:
