@@ -372,19 +372,37 @@ def get_theme_css(theme: str) -> str:
         font-weight: bold;
     }
     
-    # /* White-Labeling */
-    # #MainMenu {visibility: hidden !important; display: none !important;}
-    # footer {visibility: hidden !important; display: none !important;}
-    # [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
-    # [data-testid="stDecoration"] {display: none !important;}
-    # header[data-testid="stHeader"] {background: transparent !important;}
-    # [class*="viewerBadge"],
-    # .viewerBadge_container__r5tak,
-    # .styles_viewerBadge__1yB5_,
-    # [data-testid="manage-app-button"],
-    # a[href*="github.com/Anushree-Radhika/FairScreen"] {
-    #     display: none !important;
-    # }
+        /* Header bar: blend with dark UI */
+    header[data-testid="stHeader"],
+    [data-testid="stHeader"] {
+        background: #0b0f19 !important;
+        background-color: #0b0f19 !important;
+    }
+
+    /* Keep header icons (sidebar expand arrow, toolbar menu) visible on dark */
+    [data-testid="stToolbar"] button,
+    [data-testid="stToolbar"] svg,
+    [data-testid="stExpandSidebarButton"],
+    [data-testid="stExpandSidebarButton"] svg,
+    [data-testid="stSidebarCollapsedControl"] button,
+    [data-testid="stSidebarCollapsedControl"] svg {
+        color: #ffffff !important;
+        fill: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+
+    [data-testid="stDecoration"] {display: none !important;}
+
+    /* Sidebar buttons (e.g. Rerun App): dark background so white text is visible */
+    section[data-testid="stSidebar"] .stButton > button,
+    section[data-testid="stSidebar"] [data-testid^="stBaseButton"] {
+        background-color: #1e293b !important;
+        border: 1px solid #334155 !important;
+    }
+    section[data-testid="stSidebar"] .stButton > button:hover,
+    section[data-testid="stSidebar"] [data-testid^="stBaseButton"]:hover {
+        border-color: #38bdf8 !important;
+    }
 </style>
 """
     else:
