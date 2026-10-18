@@ -228,17 +228,17 @@ def get_theme_css(theme: str) -> str:
     /* Form Inputs & Selectbox */
     input, [data-baseweb="select"], [data-baseweb="input"] {
         background-color: #1e293b !important;
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: black !important;
         border-color: #475569 !important;
     }
     [data-baseweb="popover"], [data-baseweb="menu"], ul[role="listbox"] {
         background-color: #1e293b !important;
-        color: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        color: blue !important;
+        -webkit-text-fill-color: black !important;
     }
     li[role="option"] {
-        color: #ffffff !important;
+        color: blue !important;
         -webkit-text-fill-color: #ffffff !important;
         background-color: #1e293b !important;
     }
