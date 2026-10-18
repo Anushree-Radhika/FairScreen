@@ -2,10 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Suppress interactive debconf prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install all C/C++, Fortran, Rust compilers AND system dev headers required for s390x
+# Install compilers, math libraries, and system dev libraries (including Arrow)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
@@ -14,17 +13,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cargo \
     rustc \
     cmake \
+    ninja-build \
     pkg-config \
     libopenblas-dev \
     liblapack-dev \
     zlib1g-dev \
     libjpeg-dev \
     libssl-dev \
+    libarrow-dev \
     && rm -rf /var/lib/apt-get/lists/*
 
 COPY requirements.txt .
 
-# Upgrade pip build tools before installing requirements
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
