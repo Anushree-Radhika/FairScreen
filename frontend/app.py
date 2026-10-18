@@ -310,47 +310,34 @@ def get_theme_css(theme: str) -> str:
         fill: #000000 !important;
         color: #000000 !important;
     }
-    div[data-baseweb="popover"],
-    div[data-baseweb="menu"],
-    ul[role="listbox"] {
-        background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
+        /* Dropdown popup (Streamlit selectbox): dark background, white text */
+    [data-testid="stSelectboxVirtualDropdown"],
+    [data-testid="stSelectboxVirtualDropdown"] [role="listbox"],
+    div[role="listbox"] {
+        background-color: #1e293b !important;
         border-radius: 8px !important;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
     }
-    li[role="option"] {
-        color: #000000 !important;
-        -webkit-text-fill-color: #000000 !important;
-        background-color: #ffffff !important;
-        font-size: 0.92rem !important;
+    [data-testid="stSelectboxVirtualDropdown"] [role="option"],
+    div[role="listbox"] [role="option"] {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
-    li[role="option"]:hover {
-        background-color: #e2e8f0 !important;
-        color: #000000 !important;
-        -webkit-text-fill-color: #000000 !important;
+    [data-testid="stSelectboxVirtualDropdown"] [role="option"] *,
+    div[role="listbox"] [role="option"] * {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
-    li[role="option"][aria-selected="true"] {
-        background-color: #cbd5e1 !important;
-        color: #000000 !important;
-        -webkit-text-fill-color: #000000 !important;
+    [data-testid="stSelectboxVirtualDropdown"] [role="option"]:hover,
+    [data-testid="stSelectboxVirtualDropdown"] [role="option"][data-focused="true"],
+    [data-testid="stSelectboxVirtualDropdown"] [role="option"][data-hovered="true"],
+    div[role="listbox"] [role="option"]:hover {
+        background-color: #334155 !important;
+    }
+    [data-testid="stSelectboxVirtualDropdown"] [role="option"][aria-selected="true"],
+    div[role="listbox"] [role="option"][aria-selected="true"] {
+        background-color: #475569 !important;
         font-weight: bold !important;
-    }
-        /* Dropdown option text: force dark text on the white popup (children included) */
-    div[data-baseweb="popover"] *,
-    div[data-baseweb="menu"] *,
-    ul[role="listbox"] *,
-    li[role="option"] *,
-    li[role="option"] div,
-    li[role="option"] span {
-        color: #000000 !important;
-        -webkit-text-fill-color: #000000 !important;
-    }
-
-    /* Hover / keyboard-highlighted option */
-    li[role="option"]:hover,
-    li[role="option"][aria-selected="true"],
-    li[role="option"][data-highlighted="true"] {
-        background-color: #e2e8f0 !important;
     }
         /* All secondary buttons (e.g. Upload New Resume): dark background, white text */
     .stButton > button[kind="secondary"],
