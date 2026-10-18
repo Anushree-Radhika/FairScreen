@@ -2,11 +2,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Suppress interactive debconf prompts during apt installation
+# Suppress interactive debconf prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install all compilers, build tools, and dev libraries required for s390x
+# Install compilers, git, and required system development libraries for s390x
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
     build-essential \
     gcc \
     g++ \
@@ -21,24 +22,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zlib1g-dev \
     libjpeg-dev \
     libssl-dev \
-    libutf8proc-dev \
-    libbrotli-dev \
-    libbz2-dev \
-    libzstd-dev \
-    liblz4-dev \
-    libsnappy-dev \
     && rm -rf /var/lib/apt-get/lists/*
 
 COPY requirements.txt .
 
-# Upgrade pip build tools
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+# Remove any indirect pyarrow requirement if present
+RUN sed -i '/pyarrow/d' requirements.txt
 
-# Tell pyarrow build system to bundle its C++ components
-ENV PYARROW_WITH_DATASET=1
-ENV PYARROW_WITH_PARQUET=1
-ENV PYARROW_BUILD_TYPE=release
+# Upgrade pip and pre-install build backend dependencies (fixes meson-python error)
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel meson-python meson ninja
 
+# Install application dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
