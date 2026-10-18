@@ -5,7 +5,7 @@ WORKDIR /app
 # Suppress interactive debconf prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install core build dependencies and git
+# Install compilers, git, and required C/Fortran/Rust system libraries for s390x
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     build-essential \
@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
     ninja-build \
     pkg-config \
+    patchelf \
     libopenblas-dev \
     liblapack-dev \
     zlib1g-dev \
@@ -26,15 +27,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt .
 
-# Ensure pyarrow is removed from requirements
+# Ensure pyarrow is removed from requirements before pip install
 RUN sed -i '/pyarrow/d' requirements.txt
 
-# Upgrade pip build tools
+# Upgrade core pip build tools and install build backends required by pandas/scipy
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir meson-python cython
 
-# Install dependencies while telling pip NOT to attempt building pyarrow
-RUN pip install --no-cache-dir --no-deps-check -r requirements.txt || \
-    pip install --no-cache-dir --no-build-isolation -r requirements.txt
+# Install Python requirements
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
