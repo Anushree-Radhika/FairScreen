@@ -160,9 +160,14 @@ class FairScreenPipeline:
         return results
 
     def get_audit_summary(self) -> Dict[str, Any]:
-        """Loads cached benchmark audit metrics from Kaggle recruitment dataset."""
+        """Loads cached benchmark audit metrics from Bias in Bios & PopResume dataset audit."""
+        bias_summary_path = RESULTS_DIR / "bias_audit_summary.json"
+        if bias_summary_path.exists():
+            with open(bias_summary_path, "r", encoding="utf-8") as f:
+                return json.load(f)
         rec_summary_path = RESULTS_DIR / "recruitment_audit_summary.json"
         if rec_summary_path.exists():
             with open(rec_summary_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         return {}
+
