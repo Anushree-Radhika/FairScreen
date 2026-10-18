@@ -54,6 +54,22 @@ st.markdown("""
         border: 1px solid #e9ecef;
         margin-bottom: 1rem;
     }
+    
+    /* Complete White-Labeling: Hide Streamlit Branding, Repo Badges & Toolbar */
+    #MainMenu {visibility: hidden !important; display: none !important;}
+    footer {visibility: hidden !important; display: none !important;}
+    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;}
+    header[data-testid="stHeader"] {background: transparent !important;}
+    
+    /* Hide Streamlit Community Cloud GitHub/Fork/Source Badges */
+    [class*="viewerBadge"],
+    .viewerBadge_container__r5tak,
+    .styles_viewerBadge__1yB5_,
+    [data-testid="manage-app-button"],
+    a[href*="github.com/Anushree-Radhika/FairScreen"] {
+        display: none !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
