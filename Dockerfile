@@ -5,8 +5,9 @@ WORKDIR /app
 # Suppress interactive debconf prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install required build compilers and development libraries for s390x
+# Install git, compilers, and necessary dev libraries for s390x
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
     build-essential \
     gcc \
     g++ \
@@ -25,10 +26,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt .
 
-# Ensure pyarrow is removed from requirements before pip install
+# Remove any indirect pyarrow requirement if present
 RUN sed -i '/pyarrow/d' requirements.txt
 
-# Upgrade pip build tools and install dependencies
+# Upgrade pip build tools and install requirements
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
