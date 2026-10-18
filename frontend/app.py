@@ -384,7 +384,7 @@ def get_theme_css(theme: str) -> str:
     [data-testid="stToolbar"] svg {
         color: #ffffff !important;
         fill: #ffffff !important;
-        -webkit-text-fill-color: #ffffff !important;
+        -webkit-text-fill-color: #0f172a !important;
     }
     [data-testid="stDecoration"] {display: none !important;}
     header[data-testid="stHeader"] {background: transparent !important;}
