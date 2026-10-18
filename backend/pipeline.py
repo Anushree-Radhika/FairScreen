@@ -35,10 +35,7 @@ class FairScreenPipeline:
     def _ensure_models_loaded(self):
         try:
             # 1. Bias in Bios Baseline Model (Historical Biased AI)
-            try:
-                self.baseline_vec, self.baseline_clf = load_model_artifacts("bias_in_bios_baseline")
-            except Exception:
-                self.baseline_vec, self.baseline_clf = load_model_artifacts("recruitment_baseline")
+            self.baseline_vec, self.baseline_clf = load_model_artifacts("bias_in_bios_baseline")
 
             # 2. PopResume Selection Probability Model
             try:
@@ -47,16 +44,10 @@ class FairScreenPipeline:
                 self.pop_vec, self.pop_clf = None, None
 
             # 3. FairScreen Mitigated Model (AIF360 sample reweighed)
-            try:
-                self.mitigated_vec, self.mitigated_clf = load_model_artifacts("bias_in_bios_mitigated")
-            except Exception:
-                self.mitigated_vec, self.mitigated_clf = load_model_artifacts("recruitment_mitigated")
+            self.mitigated_vec, self.mitigated_clf = load_model_artifacts("bias_in_bios_mitigated")
 
             # 4. Redacted Model for explainability
-            try:
-                self.redacted_vec, self.redacted_clf = load_model_artifacts("bias_in_bios_redacted")
-            except Exception:
-                self.redacted_vec, self.redacted_clf = load_model_artifacts("recruitment_redacted")
+            self.redacted_vec, self.redacted_clf = load_model_artifacts("bias_in_bios_redacted")
 
             self._models_loaded = True
         except Exception:
@@ -231,10 +222,6 @@ class FairScreenPipeline:
         bias_summary_path = RESULTS_DIR / "bias_audit_summary.json"
         if bias_summary_path.exists():
             with open(bias_summary_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        rec_summary_path = RESULTS_DIR / "recruitment_audit_summary.json"
-        if rec_summary_path.exists():
-            with open(rec_summary_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         return {}
 
