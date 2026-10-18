@@ -20,9 +20,197 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom High-End Styling
-st.markdown("""
+# ==================== THEME ENGINE ====================
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
+
+def get_theme_css(theme: str) -> str:
+    is_dark = (theme == "dark")
+    if is_dark:
+        return """
 <style>
+    /* Global Base */
+    .stApp {
+        background-color: #0b0f19 !important;
+        color: #f1f5f9 !important;
+    }
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #0f172a !important;
+        border-right: 1px solid #1e293b !important;
+    }
+    section[data-testid="stSidebar"] * {
+        color: #e2e8f0 !important;
+    }
+    section[data-testid="stSidebar"] p {
+        color: #94a3b8 !important;
+    }
+    
+    /* Main Header Gradient */
+    .main-header {
+        font-size: 2.2rem;
+        font-weight: 800;
+        background: -webkit-linear-gradient(45deg, #38bdf8, #818cf8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.2rem;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6, .stMarkdown p, .stMarkdown span {
+        color: #f1f5f9 !important;
+    }
+    .stCaption, [data-testid="stCaptionContainer"], .hero-subtext {
+        color: #94a3b8 !important;
+    }
+    
+    /* Cards & Expanders */
+    .card, [data-testid="stExpander"] {
+        background-color: #1e293b !important;
+        border: 1px solid #334155 !important;
+        color: #f8fafc !important;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+        background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%) !important;
+        border: 1px solid #334155 !important;
+        border-radius: 12px;
+        padding: 1.2rem 0.9rem;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+    .feature-card-title {
+        color: #38bdf8 !important;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: 0.4rem;
+        margin-bottom: 0.25rem;
+    }
+    .feature-card-desc {
+        color: #94a3b8 !important;
+        font-size: 0.86rem;
+        line-height: 1.45;
+        font-weight: 500;
+    }
+    
+    /* Code / PDF Preview */
+    .code-preview-box {
+        background: #0f172a !important;
+        color: #f8fafc !important;
+        border: 1px solid #334155 !important;
+        border-radius: 10px;
+        padding: 1rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"] {
+        color: #38bdf8 !important;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #cbd5e1 !important;
+    }
+    
+    /* Tabs */
+    button[data-baseweb="tab"] {
+        color: #94a3b8 !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #38bdf8 !important;
+        border-bottom-color: #38bdf8 !important;
+    }
+    
+    /* Form Inputs */
+    input, textarea, [data-baseweb="select"] {
+        background-color: #1e293b !important;
+        color: #f8fafc !important;
+        border-color: #475569 !important;
+    }
+    [data-baseweb="popover"], [data-baseweb="menu"], ul[role="listbox"] {
+        background-color: #1e293b !important;
+        color: #f8fafc !important;
+    }
+    li[role="option"] {
+        color: #f8fafc !important;
+        background-color: #1e293b !important;
+    }
+    li[role="option"]:hover {
+        background-color: #334155 !important;
+    }
+    
+    /* Tables */
+    table {
+        color: #f1f5f9 !important;
+    }
+    th {
+        background-color: #1e293b !important;
+        color: #38bdf8 !important;
+        border-color: #334155 !important;
+    }
+    td {
+        background-color: #0f172a !important;
+        color: #e2e8f0 !important;
+        border-color: #334155 !important;
+    }
+    
+    /* Badges */
+    .badge-fair {
+        background-color: #15803d;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+    .badge-bias {
+        background-color: #b91c1c;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: bold;
+    }
+    
+    /* White-Labeling */
+    #MainMenu {visibility: hidden !important; display: none !important;}
+    footer {visibility: hidden !important; display: none !important;}
+    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;}
+    header[data-testid="stHeader"] {background: transparent !important;}
+    [class*="viewerBadge"],
+    .viewerBadge_container__r5tak,
+    .styles_viewerBadge__1yB5_,
+    [data-testid="manage-app-button"],
+    a[href*="github.com/Anushree-Radhika/FairScreen"] {
+        display: none !important;
+    }
+</style>
+"""
+    else:
+        return """
+<style>
+    /* Global Base */
+    .stApp {
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+    }
+    /* Sidebar */
+    section[data-testid="stSidebar"] {
+        background-color: #f8fafc !important;
+        border-right: 1px solid #e2e8f0 !important;
+    }
+    section[data-testid="stSidebar"] * {
+        color: #1e293b !important;
+    }
+    
+    /* Main Header Gradient */
     .main-header {
         font-size: 2.2rem;
         font-weight: 800;
@@ -31,6 +219,79 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.2rem;
     }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6, .stMarkdown p, .stMarkdown span {
+        color: #0f172a !important;
+    }
+    .stCaption, [data-testid="stCaptionContainer"], .hero-subtext {
+        color: #475569 !important;
+    }
+    
+    /* Cards & Expanders */
+    .card, [data-testid="stExpander"] {
+        background-color: #f8f9fa !important;
+        border: 1px solid #e9ecef !important;
+        color: #1e293b !important;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+        background: linear-gradient(145deg, #f0f6ff 0%, #e6f0fd 100%) !important;
+        border: 1px solid #bfdbfe !important;
+        border-radius: 12px;
+        padding: 1.2rem 0.9rem;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+    }
+    .feature-card-title {
+        color: #1e3a8a !important;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: 0.4rem;
+        margin-bottom: 0.25rem;
+    }
+    .feature-card-desc {
+        color: #334155 !important;
+        font-size: 0.86rem;
+        line-height: 1.45;
+        font-weight: 500;
+    }
+    
+    /* Code / PDF Preview */
+    .code-preview-box {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 10px;
+        padding: 1rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+    }
+    
+    /* Metrics */
+    [data-testid="stMetricValue"] {
+        color: #0f172a !important;
+    }
+    [data-testid="stMetricLabel"] {
+        color: #475569 !important;
+    }
+    
+    /* Tabs */
+    button[data-baseweb="tab"] {
+        color: #475569 !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        color: #0062FF !important;
+        border-bottom-color: #0062FF !important;
+    }
+    
+    /* Badges */
     .badge-fair {
         background-color: #28a745;
         color: white;
@@ -47,22 +308,13 @@ st.markdown("""
         font-size: 0.85rem;
         font-weight: bold;
     }
-    .card {
-        padding: 1.2rem;
-        border-radius: 10px;
-        background-color: #f8f9fa;
-        border: 1px solid #e9ecef;
-        margin-bottom: 1rem;
-    }
     
-    /* Complete White-Labeling: Hide Streamlit Branding, Repo Badges & Toolbar */
+    /* White-Labeling */
     #MainMenu {visibility: hidden !important; display: none !important;}
     footer {visibility: hidden !important; display: none !important;}
     [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
     [data-testid="stDecoration"] {display: none !important;}
     header[data-testid="stHeader"] {background: transparent !important;}
-    
-    /* Hide Streamlit Community Cloud GitHub/Fork/Source Badges */
     [class*="viewerBadge"],
     .viewerBadge_container__r5tak,
     .styles_viewerBadge__1yB5_,
@@ -71,7 +323,10 @@ st.markdown("""
         display: none !important;
     }
 </style>
-""", unsafe_allow_html=True)
+"""
+
+# Inject Dynamic Theme Styles
+st.markdown(get_theme_css(st.session_state.theme), unsafe_allow_html=True)
 
 @st.cache_resource
 def get_pipeline():
@@ -83,7 +338,13 @@ pipeline = get_pipeline()
 with st.sidebar:
     st.image("https://img.icons8.com/fluency/96/scales.png", width=64)
     st.title("FairScreen")
-    st.caption("Ethical, Auditable Resume Screening on IBM LinuxONE")
+    st.markdown("---")
+    st.markdown("### 🎨 Appearance")
+    dark_mode = st.toggle("🌙 Dark Mode", value=(st.session_state.theme == "dark"), key="theme_toggle_switch")
+    new_theme = "dark" if dark_mode else "light"
+    if new_theme != st.session_state.theme:
+        st.session_state.theme = new_theme
+        st.rerun()
     
     st.markdown("---")
     st.markdown("### 🛡️ Privacy & Compliance")
@@ -181,14 +442,10 @@ with tabs[0]:
         st.markdown("---")
         st.markdown("### ✨ What FairScreen does with your resume")
         fc1, fc2, fc3, fc4 = st.columns(4)
-        c_bg = "background: linear-gradient(145deg, #f0f6ff 0%, #e6f0fd 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 1.2rem 0.9rem; text-align: center; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);"
-        t_style = "color: #1e3a8a; font-weight: 700; font-size: 1rem; margin-top: 0.4rem; margin-bottom: 0.25rem;"
-        d_style = "color: #334155; font-size: 0.86rem; line-height: 1.45; font-weight: 500;"
-
-        fc1.markdown(f"<div style='{c_bg}'><div style='font-size:1.9rem'>🔍</div><div style='{t_style}'>Reads your PDF</div><div style='{d_style}'>Extracts text and structure in-memory</div></div>", unsafe_allow_html=True)
-        fc2.markdown(f"<div style='{c_bg}'><div style='font-size:1.9rem'>🛡️</div><div style='{t_style}'>Redacts Identity</div><div style='{d_style}'>Strips names, pronouns & demographic markers</div></div>", unsafe_allow_html=True)
-        fc3.markdown(f"<div style='{c_bg}'><div style='font-size:1.9rem'>⚖️</div><div style='{t_style}'>Fair Scoring</div><div style='{d_style}'>Evaluates merit-based competencies blind to demographics</div></div>", unsafe_allow_html=True)
-        fc4.markdown(f"<div style='{c_bg}'><div style='font-size:1.9rem'>📊</div><div style='{t_style}'>PopResume Benchmarks</div><div style='{d_style}'>Evaluates against population-calibrated cohorts</div></div>", unsafe_allow_html=True)
+        fc1.markdown("<div class='feature-card'><div style='font-size:1.9rem'>🔍</div><div class='feature-card-title'>Reads your PDF</div><div class='feature-card-desc'>Extracts text and structure in-memory</div></div>", unsafe_allow_html=True)
+        fc2.markdown("<div class='feature-card'><div style='font-size:1.9rem'>🛡️</div><div class='feature-card-title'>Redacts Identity</div><div class='feature-card-desc'>Strips names, pronouns & demographic markers</div></div>", unsafe_allow_html=True)
+        fc3.markdown("<div class='feature-card'><div style='font-size:1.9rem'>⚖️</div><div class='feature-card-title'>Fair Scoring</div><div class='feature-card-desc'>Evaluates merit-based competencies blind to demographics</div></div>", unsafe_allow_html=True)
+        fc4.markdown("<div class='feature-card'><div style='font-size:1.9rem'>📊</div><div class='feature-card-title'>PopResume Benchmarks</div><div class='feature-card-desc'>Evaluates against population-calibrated cohorts</div></div>", unsafe_allow_html=True)
 
     # ── STEP 2: PDF PREVIEW ──────────────────────────────────────────────────────
     elif st.session_state.screen_step == "preview":
@@ -218,10 +475,8 @@ with tabs[0]:
         # What's inside the PDF
         st.markdown("### 📖 What's Inside the Resume")
         st.markdown(
-            "<div style='background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; border-radius:10px; "
-            "padding:1.2rem; font-family:monospace; font-size:0.88rem; "
-            f"white-space:pre-wrap; max-height:400px; overflow-y:auto;'>{resume_text[:4000]}"
-            + ("…<br><i style='color:#64748b'>(truncated for display — full text used for analysis)</i>" if len(resume_text) > 4000 else "")
+            f"<div class='code-preview-box'>{resume_text[:4000]}"
+            + ("…<br><i style='opacity:0.7;'>(truncated for display — full text used for analysis)</i>" if len(resume_text) > 4000 else "")
             + "</div>",
             unsafe_allow_html=True
         )
@@ -406,18 +661,22 @@ with tabs[0]:
             p_col3.metric("Section Status", sec_status, help="Dedicated 'Projects' section heading makes parsing reliable in ATS engines")
 
             # ATS Recruiter Reply Card
-            badge_bg = proj_analysis.get("badge_bg", "#f0f6ff")
-            tier_color = proj_analysis.get("tier_color", "#1e3a8a")
+            is_dark = (st.session_state.get("theme", "light") == "dark")
+            badge_bg = "#1e293b" if is_dark else proj_analysis.get("badge_bg", "#f0f6ff")
+            tier_color = "#38bdf8" if is_dark else proj_analysis.get("tier_color", "#1e3a8a")
             suitability = proj_analysis.get("role_suitability", f"Role Alignment for {target_role}")
+            card_text = "#cbd5e1" if is_dark else "#334155"
+            chip_bg = "#312e81" if is_dark else "#e0e7ff"
+            chip_color = "#c7d2fe" if is_dark else "#3730a3"
 
             st.markdown(
                 f"<div style='background:{badge_bg}; border:1px solid {tier_color}40; border-left:5px solid {tier_color}; "
-                f"border-radius:10px; padding:1.2rem; margin:0.8rem 0 1.2rem 0; color:#0f172a;'>"
+                f"border-radius:10px; padding:1.2rem; margin:0.8rem 0 1.2rem 0; color:{card_text};'>"
                 f"<div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;'>"
                 f"<h4 style='margin:0; color:{tier_color}; font-size:1.1rem;'>🎯 ATS Scorer Assessment: {p_tier}</h4>"
                 f"<span style='background:{tier_color}; color:white; font-size:0.8rem; font-weight:700; padding:3px 10px; border-radius:12px;'>{suitability}</span>"
                 f"</div>"
-                f"<p style='color:#334155; font-size:0.95rem; line-height:1.55; margin-top:0.4rem;'>{proj_analysis.get('ats_recruiter_reply', '')}</p>"
+                f"<p style='color:{card_text}; font-size:0.95rem; line-height:1.55; margin-top:0.4rem;'>{proj_analysis.get('ats_recruiter_reply', '')}</p>"
                 f"</div>",
                 unsafe_allow_html=True
             )
@@ -429,7 +688,7 @@ with tabs[0]:
                 tools = proj_analysis.get("matched_technologies", [])
                 if tools:
                     chips_html = "".join(
-                        f"<span style='display:inline-block; background:#e0e7ff; color:#3730a3; padding:3px 10px; margin:3px; border-radius:12px; font-size:0.82rem; font-weight:600;'>{t}</span>"
+                        f"<span style='display:inline-block; background:{chip_bg}; color:{chip_color}; padding:3px 10px; margin:3px; border-radius:12px; font-size:0.82rem; font-weight:600;'>{t}</span>"
                         for t in tools
                     )
                     st.markdown(f"<div style='margin-bottom:0.8rem;'>{chips_html}</div>", unsafe_allow_html=True)
@@ -487,18 +746,24 @@ with tabs[0]:
                 for bm in benchmarks:
                     is_sel = (bm["decision"] == "select")
                     border_color = "#16a34a" if is_sel else "#dc2626"
-                    badge_bg = "#dcfce7" if is_sel else "#fee2e2"
-                    badge_color = "#166534" if is_sel else "#991b1b"
+                    badge_bg = "#14532d" if (is_dark and is_sel) else ("#7f1d1d" if is_dark else ("#dcfce7" if is_sel else "#fee2e2"))
+                    badge_color = "#86efac" if (is_dark and is_sel) else ("#fca5a5" if is_dark else ("#166534" if is_sel else "#991b1b"))
                     badge_text = "SHORTLISTED" if is_sel else "UNDER REVIEW"
+                    card_bg = "#1e293b" if is_dark else "#f8fafc"
+                    card_border = "#334155" if is_dark else "#cbd5e1"
+                    cand_name_color = "#f1f5f9" if is_dark else "#1e293b"
+                    cand_desc_color = "#cbd5e1" if is_dark else "#334155"
+                    crit_desc_color = "#94a3b8" if is_dark else "#475569"
+                    
                     st.markdown(
-                        f"<div style='border:1px solid #cbd5e1; border-left:5px solid {border_color}; "
-                        f"padding:12px 16px; margin:8px 0; background:#f8fafc; border-radius:8px; color:#0f172a;'>"
+                        f"<div style='border:1px solid {card_border}; border-left:5px solid {border_color}; "
+                        f"padding:12px 16px; margin:8px 0; background:{card_bg}; border-radius:8px;'>"
                         f"<div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;'>"
-                        f"<span style='font-weight:700; color:#1e293b; font-size:0.95rem;'>{bm['type']}</span>"
+                        f"<span style='font-weight:700; color:{cand_name_color}; font-size:0.95rem;'>{bm['type']}</span>"
                         f"<span style='background:{badge_bg}; color:{badge_color}; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;'>{badge_text}</span>"
                         f"</div>"
-                        f"<div style='color:#334155; font-size:0.88rem; margin-top:2px;'>Candidate: <b>{bm['name']}</b></div>"
-                        f"<div style='color:#475569; font-size:0.85rem; margin-top:3px;'>Criteria: <i>{bm['reason']}</i></div>"
+                        f"<div style='color:{cand_desc_color}; font-size:0.88rem; margin-top:2px;'>Candidate: <b>{bm['name']}</b></div>"
+                        f"<div style='color:{crit_desc_color}; font-size:0.85rem; margin-top:3px;'>Criteria: <i>{bm['reason']}</i></div>"
                         f"</div>",
                         unsafe_allow_html=True
                     )
