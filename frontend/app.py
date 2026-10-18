@@ -32,18 +32,27 @@ def get_theme_css(theme: str) -> str:
     /* Global Base */
     .stApp {
         background-color: #0b0f19 !important;
-        color: #f1f5f9 !important;
+        color: #ffffff !important;
     }
+    
+    /* Force ALL text white in dark mode so all spaces and sections are crystal clear */
+    .stApp, body, p, span, label, div,
+    h1, h2, h3, h4, h5, h6,
+    .stMarkdown, .stMarkdown p, .stMarkdown span,
+    .stCaption, [data-testid="stCaptionContainer"], .hero-subtext,
+    [data-testid="stWidgetLabel"] label, [data-testid="stWidgetLabel"] p,
+    [data-testid="stMetricLabel"],
+    .feature-card-desc,
+    section[data-testid="stSidebar"] *,
+    section[data-testid="stSidebar"] p,
+    button[data-baseweb="tab"] {
+        color: #ffffff !important;
+    }
+    
     /* Sidebar */
     section[data-testid="stSidebar"] {
         background-color: #0f172a !important;
         border-right: 1px solid #1e293b !important;
-    }
-    section[data-testid="stSidebar"] * {
-        color: #e2e8f0 !important;
-    }
-    section[data-testid="stSidebar"] p {
-        color: #94a3b8 !important;
     }
     
     /* Main Header Gradient */
@@ -54,14 +63,6 @@ def get_theme_css(theme: str) -> str:
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.2rem;
-    }
-    
-    /* Typography */
-    h1, h2, h3, h4, h5, h6, .stMarkdown p, .stMarkdown span {
-        color: #f1f5f9 !important;
-    }
-    .stCaption, [data-testid="stCaptionContainer"], .hero-subtext {
-        color: #94a3b8 !important;
     }
     
     /* Cards & Expanders */
@@ -90,16 +91,31 @@ def get_theme_css(theme: str) -> str:
         margin-bottom: 0.25rem;
     }
     .feature-card-desc {
-        color: #94a3b8 !important;
+        color: #ffffff !important;
         font-size: 0.86rem;
         line-height: 1.45;
         font-weight: 500;
     }
     
+    /* File Uploader Dropzone in Dark Mode */
+    [data-testid="stFileUploadDropzone"], .stFileUploader section {
+        background-color: #1e293b !important;
+        border: 2px dashed #64748b !important;
+        color: #ffffff !important;
+    }
+    [data-testid="stFileUploadDropzone"] *, .stFileUploader section * {
+        color: #ffffff !important;
+    }
+    [data-testid="stFileUploadDropzone"] button, .stFileUploader button {
+        background-color: #334155 !important;
+        color: #ffffff !important;
+        border: 1px solid #64748b !important;
+    }
+    
     /* Code / PDF Preview */
     .code-preview-box {
         background: #0f172a !important;
-        color: #f8fafc !important;
+        color: #ffffff !important;
         border: 1px solid #334155 !important;
         border-radius: 10px;
         padding: 1rem;
@@ -115,7 +131,7 @@ def get_theme_css(theme: str) -> str:
         color: #38bdf8 !important;
     }
     [data-testid="stMetricLabel"] {
-        color: #cbd5e1 !important;
+        color: #ffffff !important;
     }
     
     /* Tabs */
@@ -665,7 +681,7 @@ with tabs[0]:
             badge_bg = "#1e293b" if is_dark else proj_analysis.get("badge_bg", "#f0f6ff")
             tier_color = "#38bdf8" if is_dark else proj_analysis.get("tier_color", "#1e3a8a")
             suitability = proj_analysis.get("role_suitability", f"Role Alignment for {target_role}")
-            card_text = "#cbd5e1" if is_dark else "#334155"
+            card_text = "#ffffff" if is_dark else "#334155"
             chip_bg = "#312e81" if is_dark else "#e0e7ff"
             chip_color = "#c7d2fe" if is_dark else "#3730a3"
 
@@ -751,9 +767,9 @@ with tabs[0]:
                     badge_text = "SHORTLISTED" if is_sel else "UNDER REVIEW"
                     card_bg = "#1e293b" if is_dark else "#f8fafc"
                     card_border = "#334155" if is_dark else "#cbd5e1"
-                    cand_name_color = "#f1f5f9" if is_dark else "#1e293b"
-                    cand_desc_color = "#cbd5e1" if is_dark else "#334155"
-                    crit_desc_color = "#94a3b8" if is_dark else "#475569"
+                    cand_name_color = "#ffffff" if is_dark else "#1e293b"
+                    cand_desc_color = "#ffffff" if is_dark else "#334155"
+                    crit_desc_color = "#e2e8f0" if is_dark else "#475569"
                     
                     st.markdown(
                         f"<div style='border:1px solid {card_border}; border-left:5px solid {border_color}; "
