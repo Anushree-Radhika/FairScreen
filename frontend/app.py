@@ -372,19 +372,19 @@ def get_theme_css(theme: str) -> str:
         font-weight: bold;
     }
     
-    /* White-Labeling */
-    #MainMenu {visibility: hidden !important; display: none !important;}
-    footer {visibility: hidden !important; display: none !important;}
-    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;}
-    header[data-testid="stHeader"] {background: transparent !important;}
-    [class*="viewerBadge"],
-    .viewerBadge_container__r5tak,
-    .styles_viewerBadge__1yB5_,
-    [data-testid="manage-app-button"],
-    a[href*="github.com/Anushree-Radhika/FairScreen"] {
-        display: none !important;
-    }
+    # /* White-Labeling */
+    # #MainMenu {visibility: hidden !important; display: none !important;}
+    # footer {visibility: hidden !important; display: none !important;}
+    # [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
+    # [data-testid="stDecoration"] {display: none !important;}
+    # header[data-testid="stHeader"] {background: transparent !important;}
+    # [class*="viewerBadge"],
+    # .viewerBadge_container__r5tak,
+    # .styles_viewerBadge__1yB5_,
+    # [data-testid="manage-app-button"],
+    # a[href*="github.com/Anushree-Radhika/FairScreen"] {
+    #     display: none !important;
+    # }
 </style>
 """
     else:
@@ -503,10 +503,20 @@ def get_theme_css(theme: str) -> str:
         font-weight: bold;
     }
     
-    /* White-Labeling */
+    /* White-Labeling & Toolbar Visibility */
     #MainMenu {visibility: hidden !important; display: none !important;}
     footer {visibility: hidden !important; display: none !important;}
-    [data-testid="stToolbar"] {visibility: hidden !important; display: none !important;}
+    [data-testid="stToolbar"] {
+        visibility: visible !important;
+        display: flex !important;
+    }
+    [data-testid="stToolbar"] button,
+    [data-testid="stToolbar"] button *,
+    [data-testid="stToolbar"] svg {
+        color: #0f172a !important;
+        fill: #0f172a !important;
+        -webkit-text-fill-color: #0f172a !important;
+    }
     [data-testid="stDecoration"] {display: none !important;}
     header[data-testid="stHeader"] {background: transparent !important;}
     [class*="viewerBadge"],
@@ -538,6 +548,9 @@ with st.sidebar:
     new_theme = "dark" if dark_mode else "light"
     if new_theme != st.session_state.theme:
         st.session_state.theme = new_theme
+        st.rerun()
+    
+    if st.button("🔄 Rerun App", key="sidebar_rerun_btn", use_container_width=True):
         st.rerun()
     
     st.markdown("---")
