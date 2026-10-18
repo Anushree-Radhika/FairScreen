@@ -20,30 +20,32 @@ FairScreen/
 │   ├── ingest.py                 # In-memory PDF parser (pypdf + pdfplumber fallback)
 │   └── pipeline.py               # End-to-end FairScreen orchestrator
 │
-├── ml/                           # ML & FAIRNESS ENGINE (The 6 Roles)
+├── ml/                           # ML & FAIRNESS ENGINE (100% Authentic Data)
 │   ├── __init__.py
-│   ├── synth.py                  # Role 2: Biased synthetic resume dataset generator
-│   ├── redact.py                 # Role 5: Demographic & identity signal scrubber
-│   ├── features.py               # Role 3: TF-IDF & merit-based feature engineering
-│   ├── model.py                  # Role 3: Baseline & clean screener classifiers
-│   ├── audit.py                  # Role 4: AIF360 parity metrics & gender swap test
-│   ├── mitigate.py               # Role 4: AIF360 sample reweighing mitigation
-│   ├── explain.py                # Role 5: Merit-based token coefficient explainer
-│   ├── jd_checker.py             # Role 5: Gaucher et al. gender-coded wording audit
-│   └── train_all.py              # Single command to train and serialize all models
+│   ├── train_recruitment_dataset.py # Trains on 10,174 real Kaggle recruitment resumes
+│   ├── real_benchmark.py         # Evaluates 962 authentic multi-domain resumes
+│   ├── redact.py                 # Demographic & identity signal scrubber
+│   ├── features.py               # TF-IDF & merit-based feature engineering
+│   ├── model.py                  # Baseline & clean screener classifiers
+│   ├── audit.py                  # AIF360 parity metrics & counterfactual swap test
+│   ├── mitigate.py               # AIF360 sample reweighing mitigation
+│   ├── explain.py                # Merit-based token coefficient explainer
+│   ├── jd_checker.py             # Gaucher et al. gender-coded wording audit
+│   └── train_all.py              # Single command to train all authentic models
 │
-├── models/                       # SERIALIZED ARTIFACTS (.pkl)
-│   ├── baseline_model.pkl        # Biased baseline model
-│   ├── baseline_vectorizer.pkl
-│   ├── redacted_model.pkl        # Identity-neutral model
-│   ├── redacted_vectorizer.pkl
-│   ├── mitigated_model.pkl       # Reweighed parity model
-│   └── mitigated_vectorizer.pkl
+├── models/                       # SERIALIZED REAL ARTIFACTS (.pkl)
+│   ├── recruitment_baseline_model.pkl
+│   ├── recruitment_baseline_vectorizer.pkl
+│   ├── recruitment_redacted_model.pkl
+│   ├── recruitment_redacted_vectorizer.pkl
+│   ├── recruitment_mitigated_model.pkl
+│   └── recruitment_mitigated_vectorizer.pkl
 │
 ├── data/                         # DATASETS & WORD LISTS
+│   ├── kaggle_recruitment/       # 10,174 authentic candidate resumes & decisions
 │   ├── gendered_words.json       # Gaucher et al. masculine/feminine stems
 │   ├── name_pools.json           # Diverse male/female names for swap tests
-│   └── results/audit_summary.json# Cached audit parity benchmarks
+│   └── results/                  # Cached audit parity benchmarks & role statistics
 │
 ├── app.py                        # Root launcher delegating to frontend/app.py
 ├── requirements.txt              # Frozen Python dependencies

@@ -1,20 +1,22 @@
 import json
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
+import numpy as np
+import pandas as pd
+
 from backend.ingest import extract_text_from_pdf, extract_sections, clean_text
 from ml.redact import redact
 from ml.model import load_model_artifacts
-from ml.audit import swap_gender
 from ml.explain import explain
-from ml.synth import load_names
 
 MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "data" / "results"
+KAGGLE_DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "kaggle_recruitment" / "dataset.csv"
 
 class FairScreenPipeline:
     """
     Backend Orchestrator for the FairScreen End-to-End Pipeline:
-    PDF Ingestion -> Redaction -> Screening (Baseline vs Mitigated) -> Explanation -> Swap Test.
+    PDF Ingestion -> Redaction -> Screening with Kaggle AI Recruitment Models -> Explanation.
     """
     def __init__(self):
         self._models_loaded = False
@@ -22,30 +24,94 @@ class FairScreenPipeline:
         self.baseline_clf = None
         self.redacted_vec = None
         self.redacted_clf = None
-        self.mitigated_vec = None
-        self.mitigated_clf = None
+        self._kaggle_df = None
         self._ensure_models_loaded()
+        self._load_kaggle_dataset()
         
     def _ensure_models_loaded(self):
         try:
-            self.baseline_vec, self.baseline_clf = load_model_artifacts("baseline")
-            self.redacted_vec, self.redacted_clf = load_model_artifacts("redacted")
-            self.mitigated_vec, self.mitigated_clf = load_model_artifacts("mitigated")
+            self.baseline_vec, self.baseline_clf = load_model_artifacts("recruitment_baseline")
+            self.redacted_vec, self.redacted_clf = load_model_artifacts("recruitment_redacted")
             self._models_loaded = True
         except Exception:
             self._models_loaded = False
+
+    def _load_kaggle_dataset(self):
+        if KAGGLE_DATA_PATH.exists():
+            try:
+                self._kaggle_df = pd.read_csv(KAGGLE_DATA_PATH)
+            except Exception:
+                self._kaggle_df = None
+
+    def get_available_roles(self) -> List[str]:
+        """Returns all distinct job roles present in the Kaggle dataset."""
+        if self._kaggle_df is not None and "Role" in self._kaggle_df.columns:
+            roles = sorted(self._kaggle_df["Role"].dropna().unique().tolist())
+            return roles
+        return [
+            "Data Scientist", "Software Engineer", "Machine Learning Engineer",
+            "DevOps Engineer", "Cloud Architect", "Product Manager"
+        ]
+
+    def get_role_decision_insights(self, role: str) -> Dict[str, Any]:
+        """Fetches real HR selection vs rejection reasons and sample candidates from the Kaggle dataset."""
+        if self._kaggle_df is None or "Role" not in self._kaggle_df.columns:
+            return {"selection_reasons": [], "rejection_reasons": [], "samples": []}
+
+        sub = self._kaggle_df[self._kaggle_df["Role"].str.lower() == role.lower()]
+        if len(sub) == 0:
+            sub = self._kaggle_df
+
+        sel = sub[sub["decision"].str.lower() == "select"]
+        rej = sub[sub["decision"].str.lower() == "reject"]
+
+        top_sel_reasons = sel["Reason_for_decision"].value_counts().head(4).to_dict()
+        top_rej_reasons = rej["Reason_for_decision"].value_counts().head(4).to_dict()
+
+        samples = []
+        if len(sel) > 0:
+            s_row = sel.iloc[0]
+            samples.append({
+                "type": "Selected Candidate (Real Kaggle Benchmark)",
+                "name": s_row["Name"],
+                "decision": "select",
+                "reason": s_row["Reason_for_decision"],
+                "resume_snippet": s_row["Resume"][:450]
+            })
+        if len(rej) > 0:
+            r_row = rej.iloc[0]
+            samples.append({
+                "type": "Rejected Candidate (Real Kaggle Benchmark)",
+                "name": r_row["Name"],
+                "decision": "reject",
+                "reason": r_row["Reason_for_decision"],
+                "resume_snippet": r_row["Resume"][:450]
+            })
+
+        return {
+            "role": role,
+            "total_applicants_in_role": len(sub),
+            "selection_rate": round(len(sel) / max(len(sub), 1), 3),
+            "selection_reasons": top_sel_reasons,
+            "rejection_reasons": top_rej_reasons,
+            "benchmark_samples": samples
+        }
 
     def process_pdf(self, pdf_file) -> Dict[str, Any]:
         """Ingests and cleans an uploaded PDF file stream."""
         return extract_text_from_pdf(pdf_file)
 
-    def screen_candidate(self, raw_text: str, candidate_first_name: Optional[str] = None) -> Dict[str, Any]:
+    def screen_candidate(
+        self,
+        raw_text: str,
+        candidate_first_name: Optional[str] = None,
+        target_role: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
         Executes end-to-end evaluation of candidate resume:
         1. Redaction of sensitive demographic features
-        2. Scoring across Baseline, Redacted, and Mitigated models
-        3. Explainability attribution
-        4. Counterfactual gender swap test
+        2. Scoring across Baseline and Redacted models trained on Kaggle data
+        3. Explainability attribution & real Kaggle benchmark comparison
         """
         if not self._models_loaded:
             self._ensure_models_loaded()
@@ -60,11 +126,12 @@ class FairScreenPipeline:
             "clean_text": clean,
             "redacted_text": redacted_text,
             "sections": sections,
-            "models_available": self._models_loaded
+            "models_available": self._models_loaded,
+            "model_source": "Kaggle AI Recruitment Pipeline Dataset (10,174 rows)"
         }
         
         if self._models_loaded:
-            # Baseline score (evaluating raw text)
+            # Baseline score (evaluating raw text with historical biases)
             X_base = self.baseline_vec.transform([clean])
             prob_base = float(self.baseline_clf.predict_proba(X_base)[0, 1])
             pred_base = int(prob_base >= 0.50)
@@ -74,53 +141,28 @@ class FairScreenPipeline:
             prob_red = float(self.redacted_clf.predict_proba(X_red)[0, 1])
             pred_red = int(prob_red >= 0.50)
             
-            # Mitigated score (evaluating debiased reweighed model)
-            X_mit = self.mitigated_vec.transform([redacted_text])
-            prob_mit = float(self.mitigated_clf.predict_proba(X_mit)[0, 1])
-            pred_mit = int(prob_mit >= 0.50)
+            # Explanation via identity-blind fair model
+            explanation_data = explain(self.redacted_vec, self.redacted_clf, redacted_text)
             
-            # Explanation via mitigated model
-            explanation_data = explain(self.mitigated_vec, self.mitigated_clf, redacted_text)
-            
-            # Counterfactual Gender Swap Test
-            males, females = load_names()
-            detected_name = candidate_first_name
-            if not detected_name:
-                first_word = clean.split()[0] if clean else "Candidate"
-                detected_name = first_word if (first_word in males or first_word in females) else "Sarah"
-                
-            swapped_text, swapped_name = swap_gender(clean, detected_name)
-            X_swap_base = self.baseline_vec.transform([swapped_text])
-            prob_swap_base = float(self.baseline_clf.predict_proba(X_swap_base)[0, 1])
-            
-            X_swap_mit = self.mitigated_vec.transform([redact(swapped_text)])
-            prob_swap_mit = float(self.mitigated_clf.predict_proba(X_swap_mit)[0, 1])
+            # Role insights from Kaggle
+            role_to_check = target_role if target_role else "Data Scientist"
+            insights = self.get_role_decision_insights(role_to_check)
             
             results.update({
                 "scores": {
                     "baseline": {"probability": round(prob_base, 3), "shortlisted": bool(pred_base)},
-                    "redacted": {"probability": round(prob_red, 3), "shortlisted": bool(pred_red)},
-                    "mitigated": {"probability": round(prob_mit, 3), "shortlisted": bool(pred_mit)}
+                    "redacted": {"probability": round(prob_red, 3), "shortlisted": bool(pred_red)}
                 },
                 "explanation": explanation_data,
-                "counterfactual_swap": {
-                    "original_name": detected_name,
-                    "swapped_name": swapped_name,
-                    "baseline_score_before": round(prob_base, 3),
-                    "baseline_score_after": round(prob_swap_base, 3),
-                    "baseline_score_delta": round(prob_swap_base - prob_base, 3),
-                    "mitigated_score_before": round(prob_mit, 3),
-                    "mitigated_score_after": round(prob_swap_mit, 3),
-                    "mitigated_score_delta": round(prob_swap_mit - prob_mit, 3)
-                }
+                "kaggle_role_insights": insights
             })
             
         return results
 
     def get_audit_summary(self) -> Dict[str, Any]:
-        """Loads cached benchmark audit metrics."""
-        summary_path = RESULTS_DIR / "audit_summary.json"
-        if summary_path.exists():
-            with open(summary_path, "r", encoding="utf-8") as f:
+        """Loads cached benchmark audit metrics from Kaggle recruitment dataset."""
+        rec_summary_path = RESULTS_DIR / "recruitment_audit_summary.json"
+        if rec_summary_path.exists():
+            with open(rec_summary_path, "r", encoding="utf-8") as f:
                 return json.load(f)
         return {}

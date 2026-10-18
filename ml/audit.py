@@ -1,9 +1,6 @@
-import random
-import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict
 import numpy as np
-from sklearn.metrics import recall_score, precision_score
-from ml.synth import load_names
+from sklearn.metrics import recall_score
 
 def audit(
     y_true: np.ndarray,
@@ -57,47 +54,3 @@ def audit(
         "unprivileged_group": unprivileged_value,
         "privileged_group": privileged_value
     }
-
-def swap_gender(text: str, current_first_name: str, name_pools: Optional[Dict[str, List[str]]] = None) -> Tuple[str, str]:
-    """
-    Role 4 Contract:
-    Performs a counterfactual gender swap on a resume while keeping all merit factors identical.
-    - If current name is Male, swaps to Female name and flips pronouns (he/him/his -> she/her/hers).
-    - If current name is Female, swaps to Male name and flips pronouns (she/her/hers -> he/him/his).
-    """
-    males, females = load_names()
-    
-    is_male = current_first_name in males
-    if is_male:
-        new_name = random.choice(females)
-        # Flip Male -> Female
-        pronoun_map = [
-            (r"\bHe\b", "She"),
-            (r"\bhe\b", "she"),
-            (r"\bHis\b", "Her"),
-            (r"\bhis\b", "her"),
-            (r"\bHim\b", "Her"),
-            (r"\bhim\b", "her"),
-            (r"\bhimself\b", "herself")
-        ]
-    else:
-        new_name = random.choice(males)
-        # Flip Female -> Male
-        pronoun_map = [
-            (r"\bShe\b", "He"),
-            (r"\bshe\b", "he"),
-            (r"\bHer\b", "His"),
-            (r"\bher\b", "his"),
-            (r"\bhers\b", "his"),
-            (r"\bherself\b", "himself")
-        ]
-        
-    swapped_text = text
-    # Swap the name
-    swapped_text = re.sub(rf"\b{re.escape(current_first_name)}\b", new_name, swapped_text)
-    
-    # Swap pronouns
-    for pattern, repl in pronoun_map:
-        swapped_text = re.sub(pattern, repl, swapped_text)
-        
-    return swapped_text, new_name
