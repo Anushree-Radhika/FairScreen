@@ -335,7 +335,23 @@ def get_theme_css(theme: str) -> str:
         -webkit-text-fill-color: #000000 !important;
         font-weight: bold !important;
     }
-    
+        /* Dropdown option text: force dark text on the white popup (children included) */
+    div[data-baseweb="popover"] *,
+    div[data-baseweb="menu"] *,
+    ul[role="listbox"] *,
+    li[role="option"] *,
+    li[role="option"] div,
+    li[role="option"] span {
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+    }
+
+    /* Hover / keyboard-highlighted option */
+    li[role="option"]:hover,
+    li[role="option"][aria-selected="true"],
+    li[role="option"][data-highlighted="true"] {
+        background-color: #e2e8f0 !important;
+    }
     /* Tables */
     table, tr, td, th {
         color: #ffffff !important;
