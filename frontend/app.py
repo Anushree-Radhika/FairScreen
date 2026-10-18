@@ -205,6 +205,72 @@ def get_theme_css(theme: str) -> str:
         white-space: pre-wrap;
     }
     
+    /* Code Blocks & Architecture Diagram */
+    .stCodeBlock,
+    [data-testid="stCodeBlock"],
+    pre,
+    code {
+        background-color: #0b1120 !important;
+        color: #38bdf8 !important;
+        -webkit-text-fill-color: #38bdf8 !important;
+        border: 1px solid #1e293b !important;
+        border-radius: 10px !important;
+    }
+    .stCodeBlock pre,
+    .stCodeBlock code,
+    [data-testid="stCodeBlock"] pre,
+    [data-testid="stCodeBlock"] code {
+        background-color: transparent !important;
+        color: #38bdf8 !important;
+        -webkit-text-fill-color: #38bdf8 !important;
+    }
+
+    /* Dedicated Architecture Terminal Card */
+    .arch-terminal-card {
+        background: #0b1120 !important;
+        border: 1px solid #1e293b !important;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+    .arch-terminal-header {
+        background: #1e293b !important;
+        padding: 0.6rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #334155;
+    }
+    .arch-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .arch-dot.red { background-color: #ef4444; }
+    .arch-dot.yellow { background-color: #f59e0b; }
+    .arch-dot.green { background-color: #10b981; }
+    .arch-title {
+        color: #94a3b8 !important;
+        font-family: monospace;
+        font-size: 0.82rem;
+        margin-left: 8px;
+        font-weight: 600;
+    }
+    .arch-code {
+        background: transparent !important;
+        color: #38bdf8 !important;
+        -webkit-text-fill-color: #38bdf8 !important;
+        padding: 1.2rem;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        margin: 0;
+        overflow-x: auto;
+        white-space: pre;
+    }
+    
     /* Metrics */
     [data-testid="stMetricValue"] {
         color: #38bdf8 !important;
@@ -225,25 +291,49 @@ def get_theme_css(theme: str) -> str:
         border-bottom-color: #38bdf8 !important;
     }
     
-    /* Form Inputs & Selectbox */
-    input, [data-baseweb="select"], [data-baseweb="input"] {
-        background-color: #1e293b !important;
-        color: #000000 !important;
-        -webkit-text-fill-color: black !important;
-        border-color: #475569 !important;
+    /* Form Inputs & Selectbox (Clean White Dropdown with Black Text) */
+    .stSelectbox div[data-baseweb="select"] > div,
+    div[data-baseweb="select"] > div {
+        background-color: #ffffff !important;
+        border: 1px solid #94a3b8 !important;
+        border-radius: 8px !important;
     }
-    [data-baseweb="popover"], [data-baseweb="menu"], ul[role="listbox"] {
-        background-color: #1e293b !important;
-        color: blue !important;
-        -webkit-text-fill-color: black !important;
+    .stSelectbox div[data-baseweb="select"] *,
+    div[data-baseweb="select"] *,
+    div[data-baseweb="select"] span,
+    div[data-baseweb="select"] div {
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        font-weight: 500 !important;
+    }
+    div[data-baseweb="select"] svg {
+        fill: #000000 !important;
+        color: #000000 !important;
+    }
+    div[data-baseweb="popover"],
+    div[data-baseweb="menu"],
+    ul[role="listbox"] {
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
     }
     li[role="option"] {
-        color: blue !important;
-        -webkit-text-fill-color: #ffffff !important;
-        background-color: #1e293b !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        background-color: #ffffff !important;
+        font-size: 0.92rem !important;
     }
     li[role="option"]:hover {
-        background-color: #334155 !important;
+        background-color: #e2e8f0 !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+    }
+    li[role="option"][aria-selected="true"] {
+        background-color: #cbd5e1 !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        font-weight: bold !important;
     }
     
     /* Tables */
@@ -1173,35 +1263,70 @@ with tabs[2]:
 
 # ==================== TAB 4: SYSTEM ARCHITECTURE ====================
 with tabs[3]:
-    st.subheader("IBM Z & LinuxONE Platform Architecture")
+    st.markdown('<div class="main-header" style="font-size:1.8rem;">🏛️ IBM Z & LinuxONE Platform Architecture</div>', unsafe_allow_html=True)
+    st.caption("Confidential computing enclave: end-to-end air-gapped screening, demographic isolation & bias mitigation.")
+
+    # Dedicated Terminal Architecture Card
     st.markdown("""
-    ### FairScreen Architectural Boundary
-    ```
-    ┌────────────────────────────────────────────────────────────────────────┐
-    │                        IBM LinuxONE Boundary (s390x)                   │
-    │                                                                        │
-    │   [PDF Upload]                                                         │
-    │        │                                                               │
-    │        ▼                                                               │
-    │   [1. Ingestion Engine] (pypdf & pdfplumber in-memory stream)          │
-    │        │                                                               │
-    │        ▼                                                               │
-    │   [2. Identity Redaction] (Names, pronouns, demographics stripped)     │
-    │        │                                                               │
-    │        ├────────────────────────────────┐                              │
-    │        ▼                                ▼                              │
-    │   [3. Feature Matrix]          [4. Demographic Audit Bank]             │
-    │    (Skills + Experience)        (Protected: Gender, Age, Race)         │
-    │        │                                │                              │
-    │        ▼                                ▼                              │
-    │   [5. Fair Screener Model]     [6. Four-Fifths Parity Audit]           │
-    │    (Demographic-Blind)          (Disparate Impact & Statistical Parity)│
-    │        │                                                               │
-    │        ▼                                                               │
-    │   [7. Merit Explainability] (Top feature weights & transparent reason) │
-    │                                                                        │
-    │   NO External Cloud APIs • Sensitive Data Encrypted & Air-Gapped       │
-    └────────────────────────────────────────────────────────────────────────┘
-    ```
-    """)
-    st.success("All screening, auditing, and explanations run strictly inside the local instance boundary.")
+    <div class="arch-terminal-card" style="margin-bottom: 0px; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+        <div class="arch-terminal-header">
+            <span class="arch-dot red"></span>
+            <span class="arch-dot yellow"></span>
+            <span class="arch-dot green"></span>
+            <span class="arch-title">s390x-linuxone-enclave :: FairScreen Architectural Boundary</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    arch_diagram = (
+        "┌────────────────────────────────────────────────────────────────────────┐\n"
+        "│                        IBM LinuxONE Boundary (s390x)                   │\n"
+        "│                                                                        │\n"
+        "│   [PDF Upload]                                                         │\n"
+        "│        │                                                               │\n"
+        "│        ▼                                                               │\n"
+        "│   [1. Ingestion Engine] (pypdf & pdfplumber in-memory stream)          │\n"
+        "│        │                                                               │\n"
+        "│        ▼                                                               │\n"
+        "│   [2. Identity Redaction] (Names, pronouns, demographics stripped)     │\n"
+        "│        │                                                               │\n"
+        "│        ├────────────────────────────────┐                              │\n"
+        "│        ▼                                ▼                              │\n"
+        "│   [3. Feature Matrix]          [4. Demographic Audit Bank]             │\n"
+        "│    (Skills + Experience)        (Protected: Gender, Age, Race)         │\n"
+        "│        │                                │                              │\n"
+        "│        ▼                                ▼                              │\n"
+        "│   [5. Fair Screener Model]     [6. Four-Fifths Parity Audit]           │\n"
+        "│    (Demographic-Blind)          (Disparate Impact & Statistical Parity)│\n"
+        "│        │                                                               │\n"
+        "│        ▼                                                               │\n"
+        "│   [7. Merit Explainability] (Top feature weights & transparent reason) │\n"
+        "│                                                                        │\n"
+        "│   NO External Cloud APIs • Sensitive Data Encrypted & Air-Gapped       │\n"
+        "└────────────────────────────────────────────────────────────────────────┘"
+    )
+    st.code(arch_diagram, language="text")
+
+    st.success("🔒 **Air-Gapped Execution**: All screening, auditing, and explanations run strictly inside the local s390x boundary with zero external network calls.")
+
+    st.markdown("---")
+    st.markdown("### ✨ Core Architectural Guarantees")
+    ac1, ac2, ac3 = st.columns(3)
+    ac1.markdown(
+        "<div class='feature-card'><div style='font-size:1.8rem'>🔒</div>"
+        "<div class='feature-card-title'>Air-Gapped In-Memory Stream</div>"
+        "<div class='feature-card-desc'>Candidate resumes are extracted directly into volatile memory. Zero external cloud API calls or database persistence.</div></div>",
+        unsafe_allow_html=True
+    )
+    ac2.markdown(
+        "<div class='feature-card'><div style='font-size:1.8rem'>🛡️</div>"
+        "<div class='feature-card-title'>Demographic Decoupling</div>"
+        "<div class='feature-card-desc'>Names, pronouns, gender markers, and racial signals are severed from the candidate feature vector before inference.</div></div>",
+        unsafe_allow_html=True
+    )
+    ac3.markdown(
+        "<div class='feature-card'><div style='font-size:1.8rem'>⚖️</div>"
+        "<div class='feature-card-title'>EEOC Parity Verification</div>"
+        "<div class='feature-card-desc'>Automatic calculation of Four-Fifths Rule compliance and Disparate Impact Ratio across 28 occupational categories with transparent merit attribution.</div></div>",
+        unsafe_allow_html=True
+    )
