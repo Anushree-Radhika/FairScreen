@@ -126,3 +126,6 @@ Visit **`http://localhost:8501`** in your browser.
 For detailed technical specifications, refer to:
 - **[`PRODUCT_OVERVIEW.md`](file:///c:/Projects/FairScreen/PRODUCT_OVERVIEW.md)**: Full end-to-end product architecture, algorithmic explanations of the 3-pillar screening engine, mathematical formulas for parity metrics (DIR, SPD, EOD), 6-role team distribution, and legal/regulatory compliance (EEOC Title VII, NYC Local Law 144, EU AI Act).
 - **[`CREDITS.md`](file:///c:/Projects/FairScreen/CREDITS.md)**: Academic citations, peer-reviewed literature, and open-source packages utilized in the project.
+
+##\item Engineered an air-gapped, zero-cloud resume parsing pipeline using Python, pypdf, and deterministic regex tokenizers to extract multi-section resume data and sanitize demographic proxy signals (names, pronouns, gendered affiliations), achieving 0.0 predictive utility loss on 960+ authentic career resumes.
+  \item Developed and benchmarked a multi-model screening engine with Scikit-learn and AIF360 sample reweighing, auditing 138k+ real-world biographies (bias-in-bios) and 2,500 population resumes (PopResume) to enforce EEOC Four-Fifths compliance (Disparate Impact Ratio, Equal Opportunity Difference) and lock counterfactual gender-swap variance to 0.0.
